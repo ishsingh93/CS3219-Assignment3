@@ -24,7 +24,7 @@ public class FileManager {
 
 	}
 
-	private static JSONObject xmlToJSON(String fileName)
+	public static JSONObject xmlToJSON(String fileName)
 			throws FileNotFoundException, IOException, UnsupportedEncodingException {
 		File file = new File(fileName);
 		FileInputStream fin = new FileInputStream(file);
@@ -43,7 +43,7 @@ public class FileManager {
 		return xmlJSONObj;
 	}
 
-	private static void jsonToTxtFile(JSONObject xmlJSONObj, String outputFileName) throws IOException {
+	public static void jsonToTxtFile(JSONObject xmlJSONObj, String outputFileName) throws IOException {
 		try (FileWriter outputFile = new FileWriter(outputFileName)) {
 			outputFile.write(xmlJSONObj.toString(PRETTY_PRINT_INDENT_FACTOR));
 			System.out.println("Successfully Copied JSON Object to File...");
