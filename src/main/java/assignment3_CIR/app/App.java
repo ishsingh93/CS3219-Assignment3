@@ -20,7 +20,7 @@ public class App {
 	
 
 	public static void main(String[] args) throws IOException {
-		
+				
 		String folderName = "D12";
 		int fileCount = FileManager.fileCounter(Paths.get("dataset"), folderName);
 		System.out.println("Total number of files in D12 is: " + fileCount);
@@ -32,18 +32,8 @@ public class App {
 		JSONObject testObj = FileManager.xmlToJSON("dataset/D12/D/D12/D12-1123-parscit.130908.xml");
 //		FileManager.jsonToTxtFile(testObj, "1123.json");
 		
-/*        JSONParser parser = new JSONParser();
-        try {
-			Object object = parser.parse(new FileReader("1124.json"));
-			JSONObject jsonObject = (JSONObject) object;
-			JSONObject ob1 = jsonObject.getJSONObject("algorithms");
-			
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-*/		
 		FileManager.getAuthorsFromJSONObj(testObj);
+		
 				
 	}
 
