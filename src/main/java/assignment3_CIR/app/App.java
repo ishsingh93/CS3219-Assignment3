@@ -21,7 +21,8 @@ public class App {
 
 	public static void main(String[] args) throws IOException {
 		
-		int fileCount = FileManager.fileCounter(Paths.get("dataset"));
+		String folderName = null;
+		int fileCount = FileManager.fileCounter(Paths.get("dataset"), folderName);
 		System.out.println("Total number of files in D12 is: " + fileCount);
 		
 		File testCount = new File("C:\\Users\\User\\my-app\\dataset");
@@ -29,7 +30,7 @@ public class App {
 		System.out.println("Total number of files: " + totalFiles);
 		
 		JSONObject testObj = FileManager.xmlToJSON("dataset/D12/D/D12/D12-1123-parscit.130908.xml");
-		FileManager.jsonToTxtFile(testObj, "1123.json");
+//		FileManager.jsonToTxtFile(testObj, "1123.json");
 		
 /*        JSONParser parser = new JSONParser();
         try {
@@ -42,16 +43,11 @@ public class App {
 			e.printStackTrace();
 		}
 */		
-		JSONObject ob1 = testObj.getJSONObject("algorithms");
-		org.json.JSONArray ar2 = ob1.getJSONArray("algorithm");
-		JSONObject ob3 = ar2.getJSONObject(0);
-		JSONObject ob4 = ob3.getJSONObject("variant.address");
-		int ob5 = ob4.getInt("no");
-		//String name = ob5.getString("content");
-		System.out.println("Done");
-		System.out.println(ob5);
+		FileManager.getAuthorsFromJSONObj(testObj);
 				
 	}
+
+	
 
 	
 	

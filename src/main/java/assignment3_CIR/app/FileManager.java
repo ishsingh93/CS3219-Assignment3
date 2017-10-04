@@ -47,11 +47,11 @@ public class FileManager {
 		try (FileWriter outputFile = new FileWriter(outputFileName)) {
 			outputFile.write(xmlJSONObj.toString(PRETTY_PRINT_INDENT_FACTOR));
 			System.out.println("Successfully Copied JSON Object to File...");
-			System.out.println("\nJSON Object: " + xmlJSONObj);
+			//System.out.println("\nJSON Object: " + xmlJSONObj);
 		}
 	}
 
-	public static int fileCounter(Path dir) throws IOException, NotDirectoryException {
+	public static int fileCounter(Path dir, String folderName) throws IOException, NotDirectoryException {
 		int c = 0;
 		if (Files.isDirectory(dir)) {
 			try (DirectoryStream<Path> files = Files.newDirectoryStream(dir)) {
@@ -78,6 +78,21 @@ public class FileManager {
 				count++;
 
 		return count;
+	}
+	
+	public static void getAuthorsFromJSONObj(JSONObject testObj) {
+		JSONObject ob1 = testObj.getJSONObject("algorithms");
+//		int i = ob1.getInt("version");
+		org.json.JSONArray ar2 = ob1.getJSONArray("algorithm");
+//		System.out.println(ar2.get(0));
+		JSONObject ob3 = (JSONObject) ar2.get(0);
+//		System.out.println(ob3.getString("name"));
+		JSONObject ob4 = ob3.getJSONObject("variant");
+//		System.out.println(ob4.getInt("no"));
+		JSONObject ob5 = ob4.getJSONObject("author");
+		System.out.println(ob5.getString("content"));
+//		System.out.println("Done");
+//		System.out.println(i);
 	}
 
 }
