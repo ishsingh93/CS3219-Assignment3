@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,6 +21,10 @@ public class FileManager {
 
 	public static int PRETTY_PRINT_INDENT_FACTOR = 4;
 	public static String TEST_XML_STRING = null;
+
+	public String[] folderNames = { "D12", "D13", "D14", "D15", "Q14", "W14" };
+	public static String dataUrl = "C:\\Users\\User\\my-app\\dataset";
+	public static File dataFolder = new File(dataUrl);
 
 	public FileManager() {
 
@@ -48,13 +53,14 @@ public class FileManager {
 		try (FileWriter outputFile = new FileWriter(outputFileName)) {
 			outputFile.write(xmlJSONObj.toString(PRETTY_PRINT_INDENT_FACTOR));
 			System.out.println("Successfully Copied JSON Object to File...");
-			//System.out.println("\nJSON Object: " + xmlJSONObj);
+			// System.out.println("\nJSON Object: " + xmlJSONObj);
 		}
 	}
 
 	public static int fileCounter(Path dir, String folderName) throws IOException, NotDirectoryException {
 		int c = 0;
-		Path fullPath = Paths.get("C:\\Users\\User\\my-app\\" + dir.toString() + "\\" + folderName + "\\" + folderName.substring(0, 1) + "\\" + folderName);
+		Path fullPath = Paths.get("C:\\Users\\User\\my-app\\" + dir.toString() + "\\" + folderName + "\\"
+				+ folderName.substring(0, 1) + "\\" + folderName);
 		System.out.println(fullPath.toString());
 		if (Files.isDirectory(fullPath)) {
 			try (DirectoryStream<Path> files = Files.newDirectoryStream(fullPath)) {
@@ -82,20 +88,20 @@ public class FileManager {
 
 		return count;
 	}
-	
+
 	public static void getAuthorsFromJSONObj(JSONObject testObj) {
 		JSONObject ob1 = testObj.getJSONObject("algorithms");
-//		int i = ob1.getInt("version");
+		// int i = ob1.getInt("version");
 		org.json.JSONArray ar2 = ob1.getJSONArray("algorithm");
-//		System.out.println(ar2.get(0));
+		// System.out.println(ar2.get(0));
 		JSONObject ob3 = (JSONObject) ar2.get(0);
-//		System.out.println(ob3.getString("name"));
+		// System.out.println(ob3.getString("name"));
 		JSONObject ob4 = ob3.getJSONObject("variant");
-//		System.out.println(ob4.getInt("no"));
+		// System.out.println(ob4.getInt("no"));
 		JSONObject ob5 = ob4.getJSONObject("author");
 		System.out.println(ob5.getString("content"));
-//		System.out.println("Done");
-//		System.out.println(i);
+		// System.out.println("Done");
+		// System.out.println(i);
 	}
 
 }
