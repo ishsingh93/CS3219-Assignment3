@@ -21,7 +21,7 @@ public class App {
 
 	public static void main(String[] args) throws IOException {
 		
-		String folderName = null;
+		String folderName = "D12";
 		int fileCount = FileManager.fileCounter(Paths.get("dataset"), folderName);
 		System.out.println("Total number of files in D12 is: " + fileCount);
 		

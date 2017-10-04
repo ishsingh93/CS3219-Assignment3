@@ -10,6 +10,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,8 +54,10 @@ public class FileManager {
 
 	public static int fileCounter(Path dir, String folderName) throws IOException, NotDirectoryException {
 		int c = 0;
-		if (Files.isDirectory(dir)) {
-			try (DirectoryStream<Path> files = Files.newDirectoryStream(dir)) {
+		Path fullPath = Paths.get("C:\\Users\\User\\my-app\\" + dir.toString() + "\\" + folderName + "\\" + folderName.substring(0, 1) + "\\" + folderName);
+		System.out.println(fullPath.toString());
+		if (Files.isDirectory(fullPath)) {
+			try (DirectoryStream<Path> files = Files.newDirectoryStream(fullPath)) {
 				for (Path file : files) {
 					if (Files.isRegularFile(file) || Files.isSymbolicLink(file)) {
 						// symbolic link also looks like file
