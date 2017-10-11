@@ -53,9 +53,10 @@ public class Parser {
 			extractYears(locArr);
 			break;
 		case CONFERENCE : 
-			
+			extractConferences(locArr);
 			break;
 		case CONFERENCES :
+			extractConferences(locArr);
 			break;
 		case ALL :
 			break;
@@ -65,13 +66,27 @@ public class Parser {
 		
 	}
 
+	private void extractConferences(String[] locArr) {
+		ArrayList<String> confList = new ArrayList<String>();
+		if (locArr.length == 1) {
+			confList.add(locArr[1]);
+		} else {
+			for (String i : locArr) {
+				if (!i.equalsIgnoreCase(CONFERENCE) && !i.equalsIgnoreCase(CONFERENCES) && !i.equalsIgnoreCase(DASH)) {
+					confList.add(i);
+				}
+			}
+		}
+		inputObj.setConferences(confList);
+	}
+
 	private void extractYears(String[] locArr) {
 		ArrayList<Integer> numList = new ArrayList<Integer>();
 		if (locArr.length == 1) {
 			numList.add(Integer.parseInt(locArr[1]));
 		} else {
 			for (String i : locArr) {
-				if (!i.equalsIgnoreCase(YEAR) && !i.equalsIgnoreCase(DASH)) {
+				if (!i.equalsIgnoreCase(YEAR) && !i.equalsIgnoreCase(YEARS) && !i.equalsIgnoreCase(DASH)) {
 					numList.add(Integer.parseInt(i));
 				}
 			}
