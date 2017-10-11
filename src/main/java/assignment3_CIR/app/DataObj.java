@@ -7,7 +7,8 @@ public class DataObj {
 	private List<Integer> noOfCitedDocuments;
 	private List<Integer> rangeOfYears;
 	private List<String> citedConferences;
-	public DataObj() {
+	
+	public DataObj(Input inputObj) {
 		
 	}
 	

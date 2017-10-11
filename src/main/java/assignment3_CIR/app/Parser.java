@@ -28,7 +28,7 @@ public class Parser {
 		parseCommand(inputArr[0]);
 		parseQueryType(inputArr[1]);
 		parseLocation(inputArr);
-
+		InputHandler handler = new InputHandler(inputObj);
 	}
 
 	private void parseLocation(String[] inputArr) {
