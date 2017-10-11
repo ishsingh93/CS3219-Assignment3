@@ -9,7 +9,7 @@ public class Input {
 	private String queryType;
 	private String queryCommand;
 	private ArrayList<String> datasets;
-	private List<Integer> numYrs;
+	private ArrayList<Integer> numYrs;
 	private ArrayList<String> conferences;
 	private ArrayList<String> authors;
 	
@@ -35,7 +35,7 @@ public class Input {
 		return datasets;
 	}
 	
-	public List<Integer> getNumYrs() {
+	public ArrayList<Integer> getNumYrs() {
 		return numYrs;
 	}
 	
@@ -64,7 +64,7 @@ public class Input {
 		this.datasets = listOfDatasets;
 	}
 	
-	public void setNumYrs(List<Integer> listOfYears) {
+	public void setNumYrs(ArrayList<Integer> listOfYears) {
 		this.numYrs = listOfYears;
 	}
 	

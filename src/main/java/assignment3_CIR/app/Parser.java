@@ -14,6 +14,8 @@ public class Parser {
 	private static final String CONFERENCE = "conference=";
 	private static final String CONFERENCES = "conferences=";
 	private static final String ALL = "all";
+	private static final String DASH = "-";
+	
 	Input inputObj;
 
 	public Parser() {
@@ -42,10 +44,39 @@ public class Parser {
 			break;
 		case DATASET :
 			break;
+		case DATASETS :
+			break;
+		case YEAR :
+			extractYears(locArr);
+			break;
+		case YEARS :
+			extractYears(locArr);
+			break;
+		case CONFERENCE : 
+			
+			break;
+		case CONFERENCES :
+			break;
+		case ALL :
+			break;
 		default :
 			break;
 		}
 		
+	}
+
+	private void extractYears(String[] locArr) {
+		ArrayList<Integer> numList = new ArrayList<Integer>();
+		if (locArr.length == 1) {
+			numList.add(Integer.parseInt(locArr[1]));
+		} else {
+			for (String i : locArr) {
+				if (!i.equalsIgnoreCase(YEAR) && !i.equalsIgnoreCase(DASH)) {
+					numList.add(Integer.parseInt(i));
+				}
+			}
+		}
+		inputObj.setNumYrs(numList);
 	}
 
 	private void extractAuthors(String[] locArr) {
