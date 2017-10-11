@@ -22,7 +22,7 @@ public class FileManager {
 	public static int PRETTY_PRINT_INDENT_FACTOR = 4;
 	public static String TEST_XML_STRING = null;
 
-	public String[] folderNames = { "D12", "D13", "D14", "D15", "Q14", "W14" };
+	public String[] folderNames = { "D12", "D13", "D14", "D15", "J14", "Q14", "W14" };
 	public static String dataUrl = "C:\\Users\\User\\my-app\\dataset";
 	public static File dataFolder = new File(dataUrl);
 

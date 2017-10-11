@@ -11,11 +11,18 @@ public class UI {
 	}
 	
 	public String getInput() {
+		System.out.print("Please enter your query: ");
 		String input = sc.nextLine();
 		return input;
 	}
 	
 	public Output displayOutput() {
 		return null;
+	}
+	
+	public void run() {
+		String input = getInput();
+		Parser inputParser = new Parser();
+		inputParser.parseInput(input);
 	}
 }

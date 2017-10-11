@@ -21,7 +21,7 @@ public class App {
 
 	public static void main(String[] args) throws IOException {
 				
-		String folderName = "D12";
+/*		String folderName = "D12";
 		int fileCount = FileManager.fileCounter(Paths.get("dataset"), folderName);
 		System.out.println("Total number of files in D12 is: " + fileCount);
 		
@@ -35,7 +35,9 @@ public class App {
 		//FileManager.getAuthorsFromJSONObj(testObj);
 		int citdocs = DataManager.citedDocuments(testObj, 2012);
 		System.out.println(citdocs);
-				
+*/
+		UI uiMod = new UI();
+		uiMod.run();
 	}
 
 	
