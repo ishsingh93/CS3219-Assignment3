@@ -29,11 +29,12 @@ public class App {
 		int totalFiles = FileManager.getTotalFilesCount(testCount);
 		System.out.println("Total number of files: " + totalFiles);
 		
-		JSONObject testObj = FileManager.xmlToJSON("dataset/D12/D/D12/D12-1123-parscit.130908.xml");
-//		FileManager.jsonToTxtFile(testObj, "1123.json");
+		JSONObject testObj = FileManager.xmlToJSON("dataset/D12/D/D12/D12-1000-parscit.130908.xml");
+//		FileManager.jsonToTxtFile(testObj, "1000.json");
 		
-		FileManager.getAuthorsFromJSONObj(testObj);
-		
+		//FileManager.getAuthorsFromJSONObj(testObj);
+		int citdocs = DataManager.citedDocuments(testObj, 2012);
+		System.out.println(citdocs);
 				
 	}
 

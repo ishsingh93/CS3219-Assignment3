@@ -13,7 +13,7 @@ public class DataManager {
 	public DataManager() {
 
 	}
-	
+
 	public static int countCitations(JSONObject testObj) {
 		int lengthOfObj = 0;
 		JSONObject ob1 = testObj.getJSONObject("algorithms");
@@ -21,37 +21,38 @@ public class DataManager {
 		JSONObject ob3 = (JSONObject) ar2.get(2);
 		JSONObject ob4 = ob3.getJSONObject("citationList");
 		org.json.JSONArray ob5 = ob4.getJSONArray("citation");
-		for (int i=0; i < ob5.length(); i++) {
-			//String validString = ob5.getJSONObject(i).has("valid");
+		for (int i = 0; i < ob5.length(); i++) {
+			// String validString = ob5.getJSONObject(i).has("valid");
 			if (ob5.getJSONObject(i).has("valid")) {
 				lengthOfObj++;
 			}
 		}
 		return lengthOfObj;
 	}
-	
+
 	public static DataObj listCitedDocumentsByYears(String conference, File homeDirectory, List<Integer> rangeYears) {
 		return DataObj;
 	}
-	
+
 	public static int citedDocuments(JSONObject testObj, int year) {
 		int citedDocuments = 0;
-		String date;
+		int date;
 		JSONObject ob1 = testObj.getJSONObject("algorithms");
 		org.json.JSONArray ar2 = ob1.getJSONArray("algorithm");
 		JSONObject ob3 = (JSONObject) ar2.get(2);
 		JSONObject ob4 = ob3.getJSONObject("citationList");
 		org.json.JSONArray ar5 = ob4.getJSONArray("citation");
 		System.out.println(ar5.toString());
-			for (int i=0; i < ar5.length(); i++) {
-				if (ar5.getJSONObject(i).has("valid")) {
-					JSONObject ob6 = (JSONObject) ar5.getJSONObject(2);
-					date = ob6.getString("date");
-					System.out.println(date);
-					int datedYear = Integer.parseInt(date);
-				//if (datedYear == year) {
-				//	citedDocuments++;
-				//}
+		for (int i = 0; i < ar5.length(); i++) {
+			if (ar5.getJSONObject(i).getBoolean("valid")) {
+				JSONObject ob6 = (JSONObject) ar5.getJSONObject(i);
+				date = ob6.getInt("date");
+				System.out.println(date);
+				// int datedYear = Integer.parseInt(date);
+				if (date == year) {
+					citedDocuments++;
+				}
+				System.out.println(date + "has cited documents");
 			}
 		}
 		return citedDocuments;
