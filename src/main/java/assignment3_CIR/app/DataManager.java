@@ -7,11 +7,17 @@ import org.json.JSONObject;
 import assignment3_CIR.app.DataObj;
 
 public class DataManager {
+	
+	private Input inputObj;
+	
+	public DataManager(Input input) {
+		this.inputObj = input;
+		execute();
+	}
 
-	private static final DataObj DataObj = null;
-
-	public DataManager() {
-
+	private void execute() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	public static int countCitations(JSONObject testObj) {

@@ -16,14 +16,13 @@ public class InputHandler {
 		String command = inputObj.getQueryCommand();
 		switch (command) {
 		case FILEOP :
-			FileObj fileObj = new FileObj(inputObj);
 			break;
 		case DATAOP :
-			DataObj dataObj = new DataObj(inputObj);
 			break;
 		default :
 			break;
 		}
+		
 	}
 
 	public Input getInputObj() {
