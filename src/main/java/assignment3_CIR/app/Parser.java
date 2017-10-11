@@ -7,7 +7,7 @@ public class Parser {
 	private static final String AUTHORS = "authors=";
 	private static final String AUTHOR = "author=";
 	private static final String COMMA = ",";
-	private static final String DATASET = "dataset=";	
+	private static final String DATASET = "dataset=";
 	private static final String DATASETS = "datasets=";
 	private static final String YEAR = "year=";
 	private static final String YEARS = "years=";
@@ -15,7 +15,7 @@ public class Parser {
 	private static final String CONFERENCES = "conferences=";
 	private static final String ALL = "all";
 	private static final String DASH = "-";
-	
+
 	Input inputObj;
 
 	public Parser() {
@@ -34,41 +34,39 @@ public class Parser {
 	private void parseLocation(String[] inputArr) {
 		String location = concatLocationParameter(inputArr);
 		String[] locArr = location.split("\"");
-		//System.out.println(location);
+		// System.out.println(location);
 		switch (locArr[0]) {
-		case AUTHOR :
+		case AUTHOR:
 			extractAuthors(locArr);
 			break;
-		case AUTHORS :
+		case AUTHORS:
 			extractAuthors(locArr);
 			break;
-		case DATASET :
-			break;
-		case DATASETS :
-			break;
-		case YEAR :
+		/*
+		 * case DATASET : break; case DATASETS : break;
+		 */ case YEAR:
 			extractYears(locArr);
 			break;
-		case YEARS :
+		case YEARS:
 			extractYears(locArr);
 			break;
-		case CONFERENCE : 
+		case CONFERENCE:
 			extractConferences(locArr);
 			break;
-		case CONFERENCES :
+		case CONFERENCES:
 			extractConferences(locArr);
 			break;
-		case ALL :
+		case ALL:
 			break;
-		default :
+		default:
 			break;
 		}
-		
+
 	}
 
 	private void extractConferences(String[] locArr) {
 		ArrayList<String> confList = new ArrayList<String>();
-		if (locArr.length == 1) {
+		if (locArr.length == 2) {
 			confList.add(locArr[1]);
 		} else {
 			for (String i : locArr) {
@@ -80,16 +78,31 @@ public class Parser {
 		inputObj.setConferences(confList);
 	}
 
-	private void extractYears(String[] locArr) {
+	public void extractYears(String[] locArr) {
 		ArrayList<Integer> numList = new ArrayList<Integer>();
-		if (locArr.length == 1) {
-			numList.add(Integer.parseInt(locArr[1]));
+		if (locArr.length == 2) {
+			String[] yrRange = locArr[1].split(DASH);
+			if (yrRange.length > 0) {
+				int startYr = Integer.valueOf(yrRange[0]);
+				int endYr = Integer.valueOf(yrRange[1]);
+				//int numYrs = endYr - startYr;
+				for (int i = startYr; i <= endYr; i++) {
+					numList.add(Integer.valueOf(i));
+				}
+			} else {
+				numList.add(Integer.parseInt(locArr[1]));
+			}
+			
 		} else {
 			for (String i : locArr) {
 				if (!i.equalsIgnoreCase(YEAR) && !i.equalsIgnoreCase(YEARS) && !i.equalsIgnoreCase(DASH)) {
 					numList.add(Integer.parseInt(i));
 				}
 			}
+		}
+		System.out.println("the list of years is: ");
+		for (Integer i : numList) {
+			System.out.println(i);
 		}
 		inputObj.setNumYrs(numList);
 	}
