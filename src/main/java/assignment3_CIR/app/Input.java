@@ -7,7 +7,7 @@ public class Input {
 	
 	private String homeDirectory;
 	private String queryType;
-	private String queryInstruction;
+	private String queryCommand;
 	private ArrayList<String> datasets;
 	private List<Integer> numYrs;
 	private ArrayList<String> conferences;
@@ -27,8 +27,8 @@ public class Input {
 		return queryType;
 	}
 	
-	public String getQueryInstruction() {
-		return queryInstruction;
+	public String getQueryCommand() {
+		return queryCommand;
 	}
 	
 	public ArrayList<String> getDatasets() {
@@ -56,8 +56,8 @@ public class Input {
 		this.queryType = query;
 	}
 	
-	public void setQueryInstruction(String queryInstr) {
-		this.queryInstruction = queryInstr;
+	public void setQueryCommand(String queryInstr) {
+		this.queryCommand = queryInstr;
 	}
 	
 	public void setDatasets(ArrayList<String> listOfDatasets) {

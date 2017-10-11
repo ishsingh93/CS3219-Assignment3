@@ -20,27 +20,25 @@ public class App {
 	
 
 	public static void main(String[] args) throws IOException {
-				
-/*		String folderName = "D12";
-		int fileCount = FileManager.fileCounter(Paths.get("dataset"), folderName);
-		System.out.println("Total number of files in D12 is: " + fileCount);
-		
-		File testCount = new File("C:\\Users\\User\\my-app\\dataset");
-		int totalFiles = FileManager.getTotalFilesCount(testCount);
-		System.out.println("Total number of files: " + totalFiles);
-		
-		JSONObject testObj = FileManager.xmlToJSON("dataset/D12/D/D12/D12-1000-parscit.130908.xml");
-//		FileManager.jsonToTxtFile(testObj, "1000.json");
-		
-		//FileManager.getAuthorsFromJSONObj(testObj);
-		int citdocs = DataManager.citedDocuments(testObj, 2012);
-		System.out.println(citdocs);
-*/
 		UI uiMod = new UI();
 		uiMod.run();
 	}
 
+	/*		String folderName = "D12";
+	int fileCount = FileManager.fileCounter(Paths.get("dataset"), folderName);
+	System.out.println("Total number of files in D12 is: " + fileCount);
 	
+	File testCount = new File("C:\\Users\\User\\my-app\\dataset");
+	int totalFiles = FileManager.getTotalFilesCount(testCount);
+	System.out.println("Total number of files: " + totalFiles);
+	
+	JSONObject testObj = FileManager.xmlToJSON("dataset/D12/D/D12/D12-1000-parscit.130908.xml");
+//	FileManager.jsonToTxtFile(testObj, "1000.json");
+	
+	//FileManager.getAuthorsFromJSONObj(testObj);
+	int citdocs = DataManager.citedDocuments(testObj, 2012);
+	System.out.println(citdocs);
+*/
 
 	
 	
