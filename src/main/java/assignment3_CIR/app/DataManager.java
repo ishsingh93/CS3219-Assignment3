@@ -16,6 +16,11 @@ import org.json.JSONObject;
 public class DataManager {
 
 	private static final String DATASETPATH = "C:\\Users\\User\\my-app\\papers-2017-02-21-sample.json\\papers-2017-02-21-sample.json";
+	private static final String CITED_DOCUMENTS = "cited_documents";
+	private static final String CITATIONS = "citations";
+	private static final String DOCUMENTS = "documents";
+	private static final String AUTHORS = "authors";
+	private static final String UNIQUE_CITATIONS = "unique_citations";
 	// private static final int PRETTY_PRINT_INDENT_FACTOR = 4;
 
 	private Input inputObj;
@@ -60,13 +65,46 @@ public class DataManager {
 
 	private void execute() {
 		// TODO Auto-generated method stub
+		String queryCommand = inputObj.getQueryCommand();
+		String queryType = inputObj.getQueryType();
 		
+		if (queryCommand.equalsIgnoreCase("count")) {
+			switch (queryType) {
+			case DOCUMENTS :
+				break;
+			case CITATIONS : 
+				break;
+			case CITED_DOCUMENTS :
+				break;
+			case AUTHORS :
+				break;
+			case UNIQUE_CITATIONS :
+				break;
+			default :
+				break;
+				
+			}
+		} else if (queryCommand.equalsIgnoreCase("select")) {
+			switch (queryType) {
+			case DOCUMENTS :
+				break;
+			case CITATIONS : 
+				break;
+			case CITED_DOCUMENTS :
+				break;
+			case AUTHORS :
+				break;
+			case UNIQUE_CITATIONS :
+				break;
+			default :
+				break;
+				
+			}
+		} else {
+			// do nothing
+		}
 		
-		
-		
-		
-		
-		System.out.println("stopped but all working fine");
+		System.out.println("Data manager executed task successfully");
 	}
 
 	public static int countCitations(JSONObject testObj) {
