@@ -1,5 +1,6 @@
 package assignment3_CIR.app;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Parser {
@@ -22,7 +23,7 @@ public class Parser {
 		inputObj = new Input();
 	}
 
-	public void parseInput(String input) {
+	public void parseInput(String input) throws IOException {
 		String[] inputArr = input.split(" ");
 		printArr(inputArr);
 		parseCommand(inputArr[0]);

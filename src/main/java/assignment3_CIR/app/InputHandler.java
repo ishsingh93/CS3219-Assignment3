@@ -1,5 +1,7 @@
 package assignment3_CIR.app;
 
+import java.io.IOException;
+
 public class InputHandler {
 	
 	private static final String FILEOP = "count";
@@ -7,15 +9,16 @@ public class InputHandler {
 	
 	private Input inputObj;
 	
-	public InputHandler(Input inputObj) {
+	public InputHandler(Input inputObj) throws IOException {
 		this.setInputObj(inputObj);
 		assignToManager();
 	}
 
-	private void assignToManager() {
+	private void assignToManager() throws IOException {
 		String command = inputObj.getQueryCommand();
 		switch (command) {
 		case FILEOP :
+			DataManager dm = new DataManager(inputObj);
 			break;
 		case DATAOP :
 			break;

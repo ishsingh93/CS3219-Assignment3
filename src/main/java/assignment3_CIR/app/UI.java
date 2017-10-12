@@ -1,5 +1,6 @@
 package assignment3_CIR.app;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class UI {
@@ -20,7 +21,7 @@ public class UI {
 		return null;
 	}
 	
-	public void run() {
+	public void run() throws IOException {
 		String input = getInput();
 		Parser inputParser = new Parser();
 		inputParser.parseInput(input);

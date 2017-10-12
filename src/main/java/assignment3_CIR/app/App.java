@@ -19,6 +19,10 @@ import org.json.simple.parser.ParseException;
 public class App {
 	
 
+	/**
+	 * @param args
+	 * @throws IOException
+	 */
 	public static void main(String[] args) throws IOException {
 		UI uiMod = new UI();
 		uiMod.run();

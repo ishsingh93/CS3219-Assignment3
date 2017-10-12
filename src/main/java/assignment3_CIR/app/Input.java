@@ -1,7 +1,6 @@
 package assignment3_CIR.app;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Input {
 	
