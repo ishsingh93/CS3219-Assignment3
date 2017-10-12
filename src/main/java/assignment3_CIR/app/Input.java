@@ -11,6 +11,8 @@ public class Input {
 	private ArrayList<Integer> numYrs;
 	private ArrayList<String> conferences;
 	private ArrayList<String> authors;
+	private String venue;
+	
 	
 	//Constructors
 	public Input() {
@@ -46,6 +48,10 @@ public class Input {
 		return authors;
 	}
 	
+	public String getVenue() {
+		return venue;
+	}
+
 	//Setters
 	public void setHomeDirectory(String homeDir) {
 		this.homeDirectory = homeDir;
@@ -74,4 +80,9 @@ public class Input {
 	public void setAuthors(ArrayList<String> listOfAuthors) {
 		this.authors = listOfAuthors;
 	}
+	
+	public void setVenue(String venue) {
+		this.venue = venue;
+	}
+
 }
