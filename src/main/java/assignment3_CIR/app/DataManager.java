@@ -8,14 +8,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 public class DataManager {
 
-	private static final String DATASETPATH = "C:\\Users\\User\\my-app\\papers-2017-02-21-sample.json\\papers-2017-02-21-sample.json";
+	// please change directory to your own localied directory
+	private static final String DATASETPATH = "D:\\CS3219-Assignment3\\papers-2017-02-21-sample.json\\sample5papers.json";
 	private static final String CITED_DOCUMENTS = "cited_documents";
 	private static final String CITATIONS = "citations";
 	private static final String DOCUMENTS = "documents";
@@ -77,7 +79,8 @@ public class DataManager {
 			case CITED_DOCUMENTS :
 				break;
 			case AUTHORS :
-				break;
+				int authors = countAuthors(dataset);
+				System.out.println("Number of authors: " + authors);
 			case UNIQUE_CITATIONS :
 				break;
 			default :
@@ -149,6 +152,33 @@ public class DataManager {
 			}
 		}
 		return citedDocuments;
+	}
+	
+	public static int countAuthors(ArrayList<JSONObject> datasets) {
+		int authorCount = 0;
+		List<String> listAuthors = new ArrayList<String>();
+		for (int i=0; i< datasets.size(); i++) {
+			if (datasets.get(i).has("authors")) {
+				System.out.println("yass there's authors at data " + i);
+				JSONArray authorsArray = datasets.get(i).getJSONArray("authors");
+				//System.out.println(authorsArray.toString());
+				for (int j=0; j< authorsArray.length(); j++) {
+					JSONObject element = authorsArray.getJSONObject(j);
+					//System.out.println(element.toString());
+					if (element.has("name")) {
+						String nameString = element.getString("name");
+						System.out.println(nameString);
+						listAuthors.add(nameString);
+					}
+				}
+					
+			}
+		}
+		Set<String> set = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+		set.addAll(listAuthors);
+		listAuthors = new ArrayList<String>(set);
+		authorCount = listAuthors.size();
+		return authorCount;
 	}
 
 	public Input getInputObj() {
