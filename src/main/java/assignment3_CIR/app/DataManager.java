@@ -17,13 +17,13 @@ import org.json.JSONObject;
 public class DataManager {
 
 	// please change directory to your own localied directory
-	private static final String DATASETPATH = "D:\\CS3219-Assignment3\\papers-2017-02-21-sample.json\\sample5papers.json";
+	private static final String DATASETPATH = "C:\\Users\\User\\my-app\\papers-2017-02-21-sample.json\\sample5papers.json";
 	private static final String CITED_DOCUMENTS = "cited_documents";
 	private static final String CITATIONS = "citations";
 	private static final String DOCUMENTS = "documents";
 	private static final String AUTHORS = "authors";
 	private static final String UNIQUE_CITATIONS = "unique_citations";
-	// private static final int PRETTY_PRINT_INDENT_FACTOR = 4;
+//	private static final int PRETTY_PRINT_INDENT_FACTOR = 4;
 
 	private Input inputObj;
 	private ArrayList<JSONObject> dataset = new ArrayList<JSONObject>();
@@ -75,6 +75,8 @@ public class DataManager {
 			case DOCUMENTS :
 				break;
 			case CITATIONS : 
+				int numCitations = countCitations(dataset);
+				System.out.println("Total number of citations in the dataset is: " + numCitations);
 				break;
 			case CITED_DOCUMENTS :
 				break;
@@ -110,20 +112,14 @@ public class DataManager {
 		System.out.println("Data manager executed task successfully");
 	}
 
-	public static int countCitations(JSONObject testObj) {
-		int lengthOfObj = 0;
-		JSONObject ob1 = testObj.getJSONObject("algorithms");
-		org.json.JSONArray ar2 = ob1.getJSONArray("algorithm");
-		JSONObject ob3 = (JSONObject) ar2.get(2);
-		JSONObject ob4 = ob3.getJSONObject("citationList");
-		org.json.JSONArray ob5 = ob4.getJSONArray("citation");
-		for (int i = 0; i < ob5.length(); i++) {
-			// String validString = ob5.getJSONObject(i).has("valid");
-			if (ob5.getJSONObject(i).has("valid")) {
-				lengthOfObj++;
-			}
+	public static int countCitations(ArrayList<JSONObject> dataset) {
+		int numCitations = 0;
+		for (int i = 0; i < dataset.size(); i++) {
+			JSONArray inCitArr = dataset.get(i).getJSONArray("inCitations");
+			JSONArray outCitArr = dataset.get(i).getJSONArray("outCitations");
+			numCitations = numCitations + inCitArr.length() + outCitArr.length();
 		}
-		return lengthOfObj;
+		return numCitations;
 	}
 
 	/*
