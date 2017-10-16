@@ -18,7 +18,7 @@ public class DataManager {
 
 	// please change directory to your own localised directory
 	// Location of Ish's directory -> C:\\Users\\User\\my-app\\papers-2017-02-21-sample.json\\sample5papers.json
-	// Location of Javan's directory -> 
+	// Location of Javan's directory -> D:\CS3219-Assignment3\papers-2017-02-21-sample.json\\papers-2017-02-21-sample.json
 	private static final String CITED_DOCUMENTS = "cited_documents";
 	private static final String CITATIONS = "citations";
 	private static final String DOCUMENTS = "documents";
@@ -76,7 +76,7 @@ public class DataManager {
 			case DOCUMENTS :
 				break;
 			case CITATIONS : 
-				int numCitations = countCitations(dataset);
+				int numCitations = countInCitations(dataset);
 				System.out.println("Total number of citations in the dataset is: " + numCitations);
 				break;
 			case CITED_DOCUMENTS :
@@ -130,7 +130,7 @@ public class DataManager {
 		}
 		return numCitations;
 	}
-
+	
 	/*
 	 * public static DataObj listCitedDocumentsByYears(String conference, File
 	 * homeDirectory, List<Integer> rangeYears) { return DataObj; }
