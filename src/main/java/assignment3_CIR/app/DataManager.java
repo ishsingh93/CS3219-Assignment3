@@ -17,6 +17,8 @@ import org.json.JSONObject;
 public class DataManager {
 
 	// please change directory to your own localised directory
+	// Location of Ish's directory -> C:\\Users\\User\\my-app\\papers-2017-02-21-sample.json\\sample5papers.json
+	// Location of Javan's directory -> 
 	private static final String CITED_DOCUMENTS = "cited_documents";
 	private static final String CITATIONS = "citations";
 	private static final String DOCUMENTS = "documents";
@@ -111,12 +113,20 @@ public class DataManager {
 		System.out.println("Data manager executed task successfully");
 	}
 
-	public static int countCitations(ArrayList<JSONObject> dataset) {
+	public static int countInCitations(ArrayList<JSONObject> dataset) {
 		int numCitations = 0;
 		for (int i = 0; i < dataset.size(); i++) {
 			JSONArray inCitArr = dataset.get(i).getJSONArray("inCitations");
+			numCitations = numCitations + inCitArr.length();
+		}
+		return numCitations;
+	}
+	
+	public static int countOutCitations(ArrayList<JSONObject> dataset) {
+		int numCitations = 0;
+		for (int i = 0; i < dataset.size(); i++) {
 			JSONArray outCitArr = dataset.get(i).getJSONArray("outCitations");
-			numCitations = numCitations + inCitArr.length() + outCitArr.length();
+			numCitations = numCitations + outCitArr.length();
 		}
 		return numCitations;
 	}
