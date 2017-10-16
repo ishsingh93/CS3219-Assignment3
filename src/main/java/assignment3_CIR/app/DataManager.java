@@ -16,8 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 public class DataManager {
 
-	// please change directory to your own localied directory
-	private static final String DATASETPATH = "C:\\Users\\User\\my-app\\papers-2017-02-21-sample.json\\sample5papers.json";
+	// please change directory to your own localised directory
 	private static final String CITED_DOCUMENTS = "cited_documents";
 	private static final String CITATIONS = "citations";
 	private static final String DOCUMENTS = "documents";
@@ -25,7 +24,7 @@ public class DataManager {
 	private static final String UNIQUE_CITATIONS = "unique_citations";
 //	private static final int PRETTY_PRINT_INDENT_FACTOR = 4;
 
-	private Input inputObj;
+	private static Input inputObj;
 	private ArrayList<JSONObject> dataset = new ArrayList<JSONObject>();
 
 	public DataManager(Input input) throws IOException {
@@ -35,9 +34,9 @@ public class DataManager {
 	}
 
 	private void parseJSONFileIntoObjArrList() throws IOException {
-		File f = new File(DATASETPATH);
+		File f = new File(inputObj.getDataLocation());
 		if (f.exists()) {
-			InputStream is = new FileInputStream(DATASETPATH);
+			InputStream is = new FileInputStream(inputObj.getDataLocation());
 			ArrayList<String> jsonTxt = (ArrayList<String>) IOUtils.readLines(is, "UTF-8");
 			for (String i : jsonTxt) {
 				JSONObject jo = new JSONObject(i);
@@ -51,7 +50,7 @@ public class DataManager {
 	public static String readFile() {
 		String result = "";
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(DATASETPATH));
+			BufferedReader br = new BufferedReader(new FileReader(inputObj.getDataLocation()));
 			StringBuilder sb = new StringBuilder();
 			String line = br.readLine();
 			while (line != null) {

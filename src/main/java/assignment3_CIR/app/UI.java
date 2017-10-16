@@ -23,7 +23,14 @@ public class UI {
 	
 	public void run() throws IOException {
 		String input = getInput();
+		String dataLoc = getDataLoc();
 		Parser inputParser = new Parser();
-		inputParser.parseInput(input);
+		inputParser.parseInput(input, dataLoc);
+	}
+
+	private String getDataLoc() {
+		System.out.print("Enter location of dataset: ");
+		String loc = sc.nextLine();
+		return loc;
 	}
 }

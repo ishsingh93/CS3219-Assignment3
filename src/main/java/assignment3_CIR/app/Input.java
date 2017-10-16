@@ -12,6 +12,7 @@ public class Input {
 	private ArrayList<String> conferences;
 	private ArrayList<String> authors;
 	private String venue;
+	private String dataLoc;
 	
 	
 	//Constructors
@@ -51,6 +52,10 @@ public class Input {
 	public String getVenue() {
 		return venue;
 	}
+	
+	public String getDataLocation() {
+		return dataLoc;
+	}
 
 	//Setters
 	public void setHomeDirectory(String homeDir) {
@@ -83,6 +88,10 @@ public class Input {
 	
 	public void setVenue(String venue) {
 		this.venue = venue;
+	}
+
+	public void setDataLocation(String dataLoc) {
+		this.dataLoc = dataLoc;
 	}
 
 }

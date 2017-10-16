@@ -23,13 +23,18 @@ public class Parser {
 		inputObj = new Input();
 	}
 
-	public void parseInput(String input) throws IOException {
+	public void parseInput(String input, String dataLoc) throws IOException {
 		String[] inputArr = input.split(" ");
 		printArr(inputArr);
+		parseDataLocation(dataLoc);
 		parseCommand(inputArr[0]);
 		parseQueryType(inputArr[1]);
 		parseLocation(inputArr);
 		InputHandler handler = new InputHandler(inputObj);
+	}
+
+	private void parseDataLocation(String dataLoc) {
+		inputObj.setDataLocation(dataLoc);
 	}
 
 	private void parseLocation(String[] inputArr) {
