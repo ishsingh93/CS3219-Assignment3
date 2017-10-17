@@ -6,6 +6,7 @@ public class PublicationObj {
 
 	private String publicationTitle;
 	private int pubCount;
+	private int year;
 	
 	public PublicationObj() {
 		pubCount = 0;
@@ -13,6 +14,12 @@ public class PublicationObj {
 	
 	public PublicationObj(String pubTitle) {
 		this.publicationTitle = pubTitle;
+		pubCount = 0;
+	}
+	
+	public PublicationObj(String pubTitle, int pubYear) {
+		this.publicationTitle = pubTitle;
+		this.year = pubYear;
 		pubCount = 0;
 	}
 
@@ -30,6 +37,14 @@ public class PublicationObj {
 
 	public void setPubCount(int pubCount) {
 		this.pubCount = pubCount;
+	}
+	
+	public int getPubYear() {
+		return year;
+	}
+	
+	public void setPubYear(int pubYear) {
+		this.year = pubYear;
 	}
 
     /*Comparator for sorting the list by publication Count*/

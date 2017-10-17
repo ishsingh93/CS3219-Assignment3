@@ -27,6 +27,7 @@ public class DataManager {
 	private static final String DOCUMENTS = "documents";
 	private static final String AUTHORS = "authors";
 	private static final String UNIQUE_CITATIONS = "unique_citations";
+	private static final String PUBLICATIONS = "publications";
 //	private static final int PRETTY_PRINT_INDENT_FACTOR = 4;
 
 	private Input inputObj;
@@ -90,9 +91,20 @@ public class DataManager {
 			case CITED_DOCUMENTS :
 				break;
 			case AUTHORS :
-				int authors = countAuthors(dataset);
-				System.out.println("Number of authors: " + authors);
+				//int authors = countAuthors(dataset);
+				//System.out.println("Number of authors: " + authors);
+				ArrayList<String> topAuthors = getTopAuthors(5, "ArXiv");
+				for (int topAuthorSize=0; topAuthorSize < 5; topAuthorSize++) {
+					System.out.println(topAuthors.get(topAuthorSize));
+				}
 			case UNIQUE_CITATIONS :
+				break;
+			case PUBLICATIONS :
+				ArrayList<PublicationObj> publicationsPerYear = publicationTrend(dataset, "ICSE");
+				System.out.println("Trend of publications " + publicationsPerYear.size());
+				for (int limits = 0; limits < publicationsPerYear.size(); limits++) {
+					System.out.println(publicationsPerYear.get(limits).getPublicationTitle() + " : Published in " + publicationsPerYear.get(limits).getPubYear());
+				}
 				break;
 			default :
 				break;
@@ -213,28 +225,32 @@ public class DataManager {
 		}
 		
 		sortArrListDescending(aoArr);
+		/*for (int b=0; b < aoArr.size(); b++) {
+			System.out.println(aoArr.get(b).getAuthorName() + " has " + aoArr.get(b).getCount() + " publications.");
+		}*/
 		ArrayList<String> nameArr = extractAuthorNamesFromAoArr(aoArr, numTop);
 		return nameArr;
-		
 	}
 	
 	
 	private ArrayList<String> extractAuthorNamesFromAoArr(ArrayList<AuthorObj> aoArr, int numTop) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> topAuthArr = new ArrayList<String>();
+		for (int authIndex = 0; authIndex < numTop; authIndex++) {
+			String topAuthor = aoArr.get(authIndex).getAuthorName();
+			topAuthArr.add(topAuthor);
+		}
+		return topAuthArr;
 	}
 
 	private void sortArrListDescending(ArrayList<AuthorObj> aoArr) {
-		for (AuthorObj ao : aoArr) {
-			
-		}
-		
+		Collections.sort(aoArr, AuthorObj.authorCount);
 	}
 
 	private void incrementAuthorCount(String authorName, ArrayList<AuthorObj> aoArr) {
 		for (AuthorObj ao : aoArr) {
 			if (ao.getAuthorName().equalsIgnoreCase(authorName)) {
 				ao.setCount(ao.getCount() + 1);
+				System.out.println("duplicate found : " + ao.getAuthorName());
 			}
 		}
 	}
@@ -253,10 +269,9 @@ public class DataManager {
 	
 	public static ArrayList<PublicationObj> getTopPapers (ArrayList<JSONObject> dataset, String venue, int noOfTopPapers) {
 		ArrayList<PublicationObj> publicationList = new ArrayList<PublicationObj>();
-		ArrayList<String> citationsArray = new ArrayList<String>();
 		for (JSONObject dataInJson : dataset) {
 			String getVenue = getVenue(dataInJson);
-			if (venue.equals(getVenue)) {
+			if (venue.equalsIgnoreCase(getVenue)) {
 				String paperTitle = dataInJson.getString("title");
 				JSONArray inCitArray = dataInJson.getJSONArray("inCitations");
 				PublicationObj pubObject = new PublicationObj(paperTitle);
@@ -273,6 +288,22 @@ public class DataManager {
 
 	private static void sortTopPapers(ArrayList<PublicationObj> publicationList) {
 		Collections.sort(publicationList, PublicationObj.pubCounter);
+	}
+	
+	private static ArrayList<PublicationObj> publicationTrend(ArrayList<JSONObject> dataset, String venue) {
+		ArrayList<PublicationObj> pubTrend = new ArrayList<PublicationObj>();
+		for (JSONObject dataInJson : dataset) {
+			String getVenue = getVenue(dataInJson);
+			if (venue.equalsIgnoreCase(getVenue)) {
+				int paperYear = dataInJson.getInt("year");
+				System.out.println(paperYear);
+				String paperTitle = dataInJson.getString("title");
+				PublicationObj pubObject = new PublicationObj(paperTitle, paperYear);
+				pubTrend.add(pubObject);
+			}
+		}
+		sortTopPapers(pubTrend);
+		return pubTrend;
 	}
 
 	private static String getVenue(JSONObject dataInJson) {

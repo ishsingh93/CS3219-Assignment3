@@ -1,5 +1,7 @@
 package assignment3_CIR.app;
 
+import java.util.Comparator;
+
 public class AuthorObj {
 
 	private String authorName;
@@ -25,4 +27,15 @@ public class AuthorObj {
 		this.count = count;
 	}
 
+    /*Comparator for sorting the list by author publication count*/
+    public static Comparator<AuthorObj> authorCount = new Comparator<AuthorObj>() {
+
+	public int compare(AuthorObj au1, AuthorObj au2) {
+
+	   int auCount1 = au1.getCount();
+	   int auCount2 = au2.getCount();
+
+	   /*For descending order*/
+	   return auCount2-auCount1;
+   }};
 }
