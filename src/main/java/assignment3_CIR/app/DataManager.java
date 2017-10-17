@@ -16,6 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 public class DataManager {
 
+	private static final String NAME = "name";
+	private static final String VENUE = "venue";
 	// please change directory to your own localised directory
 	// Location of Ish's directory -> C:\\Users\\User\\my-app\\papers-2017-02-21-sample.json\\sample5papers.json
 	// Location of Javan's directory -> D:\CS3219-Assignment3\papers-2017-02-21-sample.json\\papers-2017-02-21-sample.json
@@ -26,7 +28,7 @@ public class DataManager {
 	private static final String UNIQUE_CITATIONS = "unique_citations";
 //	private static final int PRETTY_PRINT_INDENT_FACTOR = 4;
 
-	private static Input inputObj;
+	private Input inputObj;
 	private ArrayList<JSONObject> dataset = new ArrayList<JSONObject>();
 
 	public DataManager(Input input) throws IOException {
@@ -49,7 +51,7 @@ public class DataManager {
 		System.out.println("Number of JSONObjects in dataset is: " + dataset.size());
 	}
 
-	public static String readFile() {
+/*	public static String readFile() {
 		String result = "";
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(inputObj.getDataLocation()));
@@ -65,7 +67,7 @@ public class DataManager {
 		}
 		return result;
 	}
-
+*/
 	private void execute() {
 		// TODO Auto-generated method stub
 		String queryCommand = inputObj.getQueryCommand();
@@ -131,10 +133,6 @@ public class DataManager {
 		return numCitations;
 	}
 	
-	/*
-	 * public static DataObj listCitedDocumentsByYears(String conference, File
-	 * homeDirectory, List<Integer> rangeYears) { return DataObj; }
-	 */
 	public static int citedDocuments(JSONObject testObj, int year) {
 		int citedDocuments = 0;
 		int date;
@@ -170,8 +168,8 @@ public class DataManager {
 				for (int j=0; j< authorsArray.length(); j++) {
 					JSONObject element = authorsArray.getJSONObject(j);
 					//System.out.println(element.toString());
-					if (element.has("name")) {
-						String nameString = element.getString("name");
+					if (element.has(NAME)) {
+						String nameString = element.getString(NAME);
 						System.out.println(nameString);
 						listAuthors.add(nameString);
 					}
@@ -184,6 +182,67 @@ public class DataManager {
 		listAuthors = new ArrayList<String>(set);
 		authorCount = listAuthors.size();
 		return authorCount;
+	}
+
+	
+	public ArrayList<String> getTopAuthors(int numTop, String ven) {
+		int initCount = 0; 
+		ArrayList<AuthorObj> aoArr = new ArrayList<AuthorObj>();
+		for (JSONObject jo : dataset) {
+			if (jo.getString(VENUE).equalsIgnoreCase(ven)) {
+				JSONArray authorArr = jo.getJSONArray(AUTHORS);
+				for (int j = 0; j < authorArr.length(); j++) {
+					JSONObject author = authorArr.getJSONObject(j);  
+					String authorName = author.getString(NAME);
+					if (aoArrHasAuthor(authorName, aoArr)) {
+						incrementAuthorCount(authorName, aoArr);
+					} else {
+						AuthorObj newAuthor = new AuthorObj();
+						newAuthor.setAuthorName(authorName);
+						newAuthor.setCount(1);
+						aoArr.add(newAuthor);
+					}
+				}
+			}
+		}
+		
+		sortArrListDescending(aoArr);
+		ArrayList<String> nameArr = extractAuthorNamesFromAoArr(aoArr, numTop);
+		return nameArr;
+		
+	}
+	
+	
+	private ArrayList<String> extractAuthorNamesFromAoArr(ArrayList<AuthorObj> aoArr, int numTop) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private void sortArrListDescending(ArrayList<AuthorObj> aoArr) {
+		for (AuthorObj ao : aoArr) {
+			
+		}
+		
+	}
+
+	private void incrementAuthorCount(String authorName, ArrayList<AuthorObj> aoArr) {
+		for (AuthorObj ao : aoArr) {
+			if (ao.getAuthorName().equalsIgnoreCase(authorName)) {
+				ao.setCount(ao.getCount() + 1);
+			}
+		}
+	}
+
+	private boolean aoArrHasAuthor(String authorName, ArrayList<AuthorObj> aoArr) {
+		boolean hasAuthor = false;
+		for (AuthorObj ao : aoArr) {
+			if (ao.getAuthorName().equalsIgnoreCase(authorName)) {
+				hasAuthor = true;
+			} else {
+				hasAuthor = false;
+			}
+		}
+		return hasAuthor;
 	}
 
 	public Input getInputObj() {
