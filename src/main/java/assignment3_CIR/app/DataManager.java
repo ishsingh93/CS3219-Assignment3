@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -20,7 +21,7 @@ public class DataManager {
 	private static final String VENUE = "venue";
 	// please change directory to your own localised directory
 	// Location of Ish's directory -> C:\\Users\\User\\my-app\\papers-2017-02-21-sample.json\\sample5papers.json
-	// Location of Javan's directory -> D:\CS3219-Assignment3\papers-2017-02-21-sample.json\\papers-2017-02-21-sample.json
+	// Location of Javan's directory -> D:\CS3219-Assignment3\papers-2017-02-21-sample.json\sample5papers.json
 	private static final String CITED_DOCUMENTS = "cited_documents";
 	private static final String CITATIONS = "citations";
 	private static final String DOCUMENTS = "documents";
@@ -76,6 +77,11 @@ public class DataManager {
 		if (queryCommand.equalsIgnoreCase("count")) {
 			switch (queryType) {
 			case DOCUMENTS :
+				ArrayList<PublicationObj> topPapers = getTopPapers(dataset, "ArXiv", 5);
+				System.out.println("Top 5 Papers of dataset " + topPapers.size());
+				for (int limit = 0; limit < 5; limit++) {
+					System.out.println(topPapers.get(limit).getPublicationTitle() + " : " + topPapers.get(limit).getPubCount() + " times");
+				}
 				break;
 			case CITATIONS : 
 				int numCitations = countInCitations(dataset);
@@ -162,7 +168,7 @@ public class DataManager {
 		List<String> listAuthors = new ArrayList<String>();
 		for (int i=0; i< datasets.size(); i++) {
 			if (datasets.get(i).has("authors")) {
-				System.out.println("yass there's authors at data " + i);
+				//System.out.println("yass there's authors at data " + i);
 				JSONArray authorsArray = datasets.get(i).getJSONArray("authors");
 				//System.out.println(authorsArray.toString());
 				for (int j=0; j< authorsArray.length(); j++) {
@@ -243,6 +249,36 @@ public class DataManager {
 			}
 		}
 		return hasAuthor;
+	}
+	
+	public static ArrayList<PublicationObj> getTopPapers (ArrayList<JSONObject> dataset, String venue, int noOfTopPapers) {
+		ArrayList<PublicationObj> publicationList = new ArrayList<PublicationObj>();
+		ArrayList<String> citationsArray = new ArrayList<String>();
+		for (JSONObject dataInJson : dataset) {
+			String getVenue = getVenue(dataInJson);
+			if (venue.equals(getVenue)) {
+				String paperTitle = dataInJson.getString("title");
+				JSONArray inCitArray = dataInJson.getJSONArray("inCitations");
+				PublicationObj pubObject = new PublicationObj(paperTitle);
+				//System.out.println(pubObject.getPublicationTitle());
+				int inCitCount = inCitArray.length();
+				pubObject.setPubCount(inCitCount);
+				publicationList.add(pubObject);
+			}
+		}
+		//System.out.println(publicationList.size());
+		sortTopPapers(publicationList);
+		return publicationList;
+	}
+
+	private static void sortTopPapers(ArrayList<PublicationObj> publicationList) {
+		Collections.sort(publicationList, PublicationObj.pubCounter);
+	}
+
+	private static String getVenue(JSONObject dataInJson) {
+		String paperVenue = dataInJson.getString("venue");
+		//System.out.println(paperVenue);
+		return paperVenue;
 	}
 
 	public Input getInputObj() {
