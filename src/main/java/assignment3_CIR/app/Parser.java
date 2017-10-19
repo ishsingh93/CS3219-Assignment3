@@ -28,7 +28,7 @@ public class Parser {
 		printArr(inputArr);
 		parseDataLocation(dataLoc);
 		parseCommand(inputArr[0]);
-		parseQueryType(inputArr[1]);
+		parseQueryType(inputArr);
 		parseLocation(inputArr);
 		InputHandler handler = new InputHandler(inputObj);
 	}
@@ -124,8 +124,21 @@ public class Parser {
 		inputObj.setAuthors(authors);
 	}
 
-	private void parseQueryType(String string) {
-		inputObj.setQueryType(string);
+	private void parseQueryType(String[] inputArr) {
+		String fullQuery = inputArr[1];
+		for (int i = 2; i < inputArr.length; i++) {
+			if (inputArr[i].equals("where")) {
+				fullQuery.trim();
+				break;
+			} else {
+				//fullQuery.concat(inputArr[i]);
+				fullQuery = fullQuery + " " + inputArr[i];
+			}
+		}
+		
+		//System.out.println("full query is: " + fullQuery);
+		inputObj.setQueryType(fullQuery);
+		
 	}
 
 	private void parseCommand(String string) {
