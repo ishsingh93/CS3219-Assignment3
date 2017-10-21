@@ -3,7 +3,7 @@ package assignment3_CIR.app;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -36,6 +36,7 @@ public class DataManager {
 
 	private Input inputObj;
 	private ArrayList<JSONObject> dataset = new ArrayList<JSONObject>();
+	private Output output = new Output();
 
 	public DataManager(Input input) throws IOException {
 		this.setInputObj(input);
@@ -231,6 +232,7 @@ public class DataManager {
 		 * System.out.println(aoArr.get(b).getAuthorName() + " has " +
 		 * aoArr.get(b).getCount() + " publications."); }
 		 */
+		output.writeCSVFile("authors", aoArr);
 		ArrayList<String> nameArr = extractAuthorNamesFromAoArr(aoArr, numTop);
 		return nameArr;
 	}
