@@ -26,16 +26,16 @@ public class Output {
 		return null;
 	}
 	
-	public void writeCSVFile(String fileName, ArrayList<AuthorObj> authorArr) {
+	public void writeCSVFile(String fileName, ArrayList<AuthorObj> authorArr, int arraySize) {
 		 ICsvBeanWriter beanWriter = null;
 		 List<AuthorObj> authorList = new ArrayList<AuthorObj>();
 		
-		for (int i=0; i<authorArr.size(); i++) {
+		for (int i=0; i< arraySize; i++) {
 			authorList.add(authorArr.get(i));
 		}
 		
 		try {
-            beanWriter = new CsvBeanWriter(new FileWriter("output.csv"),
+            beanWriter = new CsvBeanWriter(new FileWriter("D:\\CS3219-Assignment3\\src\\main\\java\\assignment3_CIR\\app\\d3\\" + fileName + ".csv"),
                     CsvPreference.STANDARD_PREFERENCE);
             
             final String[] header = new String[] { "authorName", "count"};
@@ -64,6 +64,47 @@ public class Output {
 			}
 		}
 	}
+	
+	public void writeCSVFile2(String fileName, ArrayList<PublicationObj> pubArr, int arraySize) {
+		 ICsvBeanWriter beanWriter = null;
+		 List<PublicationObj> publicationList = new ArrayList<PublicationObj>();
+		
+		for (int i=0; i< arraySize; i++) {
+			publicationList.add(pubArr.get(i));
+		}
+		
+		try {
+           beanWriter = new CsvBeanWriter(new FileWriter("D:\\CS3219-Assignment3\\src\\main\\java\\assignment3_CIR\\app\\d3\\" + fileName + ".csv"),
+                   CsvPreference.STANDARD_PREFERENCE);
+           
+           final String[] header = new String[] { "publicationTitle", "pubCount"};
+           final CellProcessor[] processors = getProcessors();
+			
+			//Write the CSV file header
+           beanWriter.writeHeader(header);
+			
+			// Write statistics
+           for (PublicationObj pubObject : publicationList) {
+           	beanWriter.write(pubObject, header, processors);
+           }
+			
+			System.out.println("CSV file created successfully");
+			
+		} catch (Exception e) {
+			System.out.println("Error in CSVFileWriter");
+			e.printStackTrace();
+		} finally {
+			
+			try {
+				beanWriter.close();
+			} catch (IOException e) {
+				System.out.println("Error while flushing/closing fileWriter");
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
 
 	private CellProcessor[] getProcessors() {
 		CellProcessor[] PROCESSORS = new CellProcessor[] {

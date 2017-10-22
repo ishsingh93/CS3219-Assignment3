@@ -58,5 +58,16 @@ public class PublicationObj {
 	   /*For descending order*/
 	   return pubCount2-pubCount1;
    }};
+   
+   public static Comparator<PublicationObj> yearComparator = new Comparator<PublicationObj>() {
+
+	public int compare(PublicationObj pub1, PublicationObj pub2) {
+
+	   int pubYr1 = pub1.getPubYear();
+	   int pubYr2 = pub2.getPubYear();
+
+	   /*For ascending order*/
+	   return pubYr1 - pubYr2;
+  }};
 	
 }

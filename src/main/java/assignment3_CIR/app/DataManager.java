@@ -36,7 +36,7 @@ public class DataManager {
 
 	private Input inputObj;
 	private ArrayList<JSONObject> dataset = new ArrayList<JSONObject>();
-	private Output output = new Output();
+	private static Output output = new Output();
 
 	public DataManager(Input input) throws IOException {
 		this.setInputObj(input);
@@ -102,11 +102,11 @@ public class DataManager {
 			case UNIQUE_CITATIONS:
 				break;
 			case PUBLICATIONS:
-				ArrayList<PublicationObj> publicationsPerYear = publicationTrend(dataset, "ICSE");
+				ArrayList<PubTrendObj> publicationsPerYear = publicationTrend(dataset, "");
 				System.out.println("Trend of publications " + publicationsPerYear.size());
 				for (int limits = 0; limits < publicationsPerYear.size(); limits++) {
-					System.out.println(publicationsPerYear.get(limits).getPublicationTitle() + " : Published in "
-							+ publicationsPerYear.get(limits).getPubYear());
+					System.out.println(publicationsPerYear.get(limits).getPublicationsCount() + " times " + " : Published in "
+							+ publicationsPerYear.get(limits).getPublishedYear());
 				}
 				break;
 			default:
@@ -232,7 +232,7 @@ public class DataManager {
 		 * System.out.println(aoArr.get(b).getAuthorName() + " has " +
 		 * aoArr.get(b).getCount() + " publications."); }
 		 */
-		output.writeCSVFile("authors", aoArr);
+		output.writeCSVFile("authors", aoArr, 10);
 		ArrayList<String> nameArr = extractAuthorNamesFromAoArr(aoArr, numTop);
 		return nameArr;
 	}
@@ -289,27 +289,54 @@ public class DataManager {
 			}
 		}
 		// System.out.println(publicationList.size());
-		sortTopPapers(publicationList);
+		sortTopPapers(publicationList, "top papers");
+		System.out.println("sorted");
+		output.writeCSVFile2("publications", publicationList, noOfTopPapers);
+		System.out.println("output to csv");
 		return publicationList;
 	}
 
-	private static void sortTopPapers(ArrayList<PublicationObj> publicationList) {
-		Collections.sort(publicationList, PublicationObj.pubCounter);
+	private static void sortTopPapers(ArrayList<PublicationObj> publicationList, String sortType) {
+		if (sortType.equals("top papers")) {
+			Collections.sort(publicationList, PublicationObj.pubCounter);
+		} else if (sortType.equals("publication trend")) {
+			Collections.sort(publicationList, PublicationObj.yearComparator);
+		}
 	}
 
-	private static ArrayList<PublicationObj> publicationTrend(ArrayList<JSONObject> dataset, String venue) {
-		ArrayList<PublicationObj> pubTrend = new ArrayList<PublicationObj>();
+	private static ArrayList<PubTrendObj> publicationTrend(ArrayList<JSONObject> dataset, String venue) {
+		ArrayList<PublicationObj> pubList = new ArrayList<PublicationObj>();
 		for (JSONObject dataInJson : dataset) {
 			String getVenue = getVenue(dataInJson);
-			if (venue.equalsIgnoreCase(getVenue)) {
+			if (venue.equalsIgnoreCase(getVenue) && dataInJson.has("year")) {
 				int paperYear = dataInJson.getInt("year");
 				System.out.println(paperYear);
 				String paperTitle = dataInJson.getString("title");
 				PublicationObj pubObject = new PublicationObj(paperTitle, paperYear);
-				pubTrend.add(pubObject);
+				pubList.add(pubObject);
 			}
 		}
-		sortTopPapers(pubTrend);
+		sortTopPapers(pubList, "publication trend");
+		
+		ArrayList<PubTrendObj> pubTrend = new ArrayList<PubTrendObj>();
+		int latestPublishedYear = pubList.get(0).getPubYear();
+		for (int i = 0; i< pubList.size(); i++) {
+			if (i == 0) { //add first element of pubTrend, only applies for first element of pubList
+				pubTrend.add(new PubTrendObj(latestPublishedYear, 1));
+			} else {
+				for (int j=0; j< pubTrend.size(); j++) { //check if PublicationObj.getPubYear() is same as year of element of pubTrend
+					if (pubList.get(i).getPubYear() == latestPublishedYear && pubTrend.get(j).getPublishedYear() == latestPublishedYear) {
+						pubTrend.get(j).incrementPublicationsCount();
+					} else if (pubList.get(i).getPubYear() != latestPublishedYear) {
+						latestPublishedYear = pubList.get(i).getPubYear();
+						pubTrend.add(new PubTrendObj(latestPublishedYear, 0));
+					} else {
+						
+					}
+				}
+			}
+		}
+		
 		return pubTrend;
 	}
 
