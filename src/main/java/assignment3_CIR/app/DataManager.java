@@ -29,7 +29,7 @@ public class DataManager {
 	private static final String CITATIONS = "citations";
 	private static final String DOCUMENTS = "documents";
 	private static final String AUTHORS = "authors";
-	private static final String TOP_5_AUTHORS = "top 5 authors";
+	private static final String TOP_AUTHORS = "top 5 authors";
 	private static final String UNIQUE_CITATIONS = "unique_citations";
 	private static final String PUBLICATIONS = "publications";
 	// private static final int PRETTY_PRINT_INDENT_FACTOR = 4;
@@ -70,16 +70,13 @@ public class DataManager {
 		// TODO Auto-generated method stub
 		String queryCommand = inputObj.getQueryCommand();
 		String queryType = inputObj.getQueryType();
+		String venue = inputObj.getVenue();
 
 		if (queryCommand.equalsIgnoreCase("count")) {
 			switch (queryType) {
 			case DOCUMENTS:
-				ArrayList<PublicationObj> topPapers = getTopPapers(dataset, "ArXiv", 5);
-				System.out.println("Top 5 Papers of dataset " + topPapers.size());
-				for (int limit = 0; limit < 5; limit++) {
-					System.out.println(topPapers.get(limit).getPublicationTitle() + " : "
-							+ topPapers.get(limit).getPubCount() + " times");
-				}
+				ArrayList<PublicationObj> topPapers = getTopPapers(dataset, venue, 5);
+				printTopPapers(topPapers);
 				break;
 			case CITATIONS:
 				int numCitations = countInCitations(dataset);
@@ -88,26 +85,20 @@ public class DataManager {
 			case CITED_DOCUMENTS:
 				break;
 			case AUTHORS:
-				// int authors = countAuthors(dataset);
-				// System.out.println("Number of authors: " + authors);
-				ArrayList<String> topAuthors = getTopAuthors(5, "ArXiv");
+				ArrayList<String> topAuthors = getTopAuthors(5, venue);
 				for (int topAuthorSize = 0; topAuthorSize < 5; topAuthorSize++) {
 					System.out.println(topAuthors.get(topAuthorSize));
 				}
 				break;
-			case TOP_5_AUTHORS:
-				ArrayList<String> top5Authors = getTopAuthors(5, "ArXiv");
+			case TOP_AUTHORS:
+				ArrayList<String> top5Authors = getTopAuthors(5, venue);
 				System.out.println("top 5 authors are: " + top5Authors);
 				break;
 			case UNIQUE_CITATIONS:
 				break;
 			case PUBLICATIONS:
 				ArrayList<PubTrendObj> publicationsPerYear = publicationTrend(dataset, "");
-				System.out.println("Trend of publications " + publicationsPerYear.size());
-				for (int limits = 0; limits < publicationsPerYear.size(); limits++) {
-					System.out.println(publicationsPerYear.get(limits).getPublicationsCount() + " times " + " : Published in "
-							+ publicationsPerYear.get(limits).getPublishedYear());
-				}
+				printPubTrend(publicationsPerYear);
 				break;
 			default:
 				break;
@@ -134,6 +125,22 @@ public class DataManager {
 		}
 
 		System.out.println("Data manager executed task successfully");
+	}
+
+	private void printPubTrend(ArrayList<PubTrendObj> publicationsPerYear) {
+		System.out.println("Trend of publications " + publicationsPerYear.size());
+		for (int limits = 0; limits < publicationsPerYear.size(); limits++) {
+			System.out.println(publicationsPerYear.get(limits).getPublicationsCount() + " times " + " : Published in "
+					+ publicationsPerYear.get(limits).getPublishedYear());
+		}
+	}
+
+	private void printTopPapers(ArrayList<PublicationObj> topPapers) {
+		System.out.println("Top 5 Papers of dataset " + topPapers.size());
+		for (int limit = 0; limit < 5; limit++) {
+			System.out.println(topPapers.get(limit).getPublicationTitle() + " : "
+					+ topPapers.get(limit).getPubCount() + " times");
+		}
 	}
 
 	public static int countInCitations(ArrayList<JSONObject> dataset) {

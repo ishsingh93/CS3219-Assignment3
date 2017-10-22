@@ -14,6 +14,7 @@ public class Parser {
 	private static final String YEARS = "years=";
 	private static final String CONFERENCE = "conference=";
 	private static final String CONFERENCES = "conferences=";
+	private static final String VENUE = "venue=";
 	private static final String ALL = "all";
 	private static final String DASH = "-";
 
@@ -48,9 +49,7 @@ public class Parser {
 		case AUTHORS:
 			extractAuthors(locArr);
 			break;
-		/*
-		 * case DATASET : break; case DATASETS : break;
-		 */ case YEAR:
+		case YEAR:
 			extractYears(locArr);
 			break;
 		case YEARS:
@@ -64,10 +63,17 @@ public class Parser {
 			break;
 		case ALL:
 			break;
+		case VENUE:
+			extractVenue(locArr);
+			break;
 		default:
 			break;
 		}
 
+	}
+
+	private void extractVenue(String[] locArr) {
+		inputObj.setVenue(locArr[1]);
 	}
 
 	private void extractConferences(String[] locArr) {
@@ -91,14 +97,14 @@ public class Parser {
 			if (yrRange.length > 0) {
 				int startYr = Integer.valueOf(yrRange[0]);
 				int endYr = Integer.valueOf(yrRange[1]);
-				//int numYrs = endYr - startYr;
+				// int numYrs = endYr - startYr;
 				for (int i = startYr; i <= endYr; i++) {
 					numList.add(Integer.valueOf(i));
 				}
 			} else {
 				numList.add(Integer.parseInt(locArr[1]));
 			}
-			
+
 		} else {
 			for (String i : locArr) {
 				if (!i.equalsIgnoreCase(YEAR) && !i.equalsIgnoreCase(YEARS) && !i.equalsIgnoreCase(DASH)) {
@@ -131,14 +137,13 @@ public class Parser {
 				fullQuery.trim();
 				break;
 			} else {
-				//fullQuery.concat(inputArr[i]);
+				// fullQuery.concat(inputArr[i]);
 				fullQuery = fullQuery + " " + inputArr[i];
 			}
 		}
-		
-		//System.out.println("full query is: " + fullQuery);
+
 		inputObj.setQueryType(fullQuery);
-		
+
 	}
 
 	private void parseCommand(String string) {
