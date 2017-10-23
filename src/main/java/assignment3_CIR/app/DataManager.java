@@ -71,11 +71,12 @@ public class DataManager {
 		String queryCommand = inputObj.getQueryCommand();
 		String queryType = inputObj.getQueryType();
 		String venue = inputObj.getVenue();
+		String[] query = queryType.split(" ");
 
 		if (queryCommand.equalsIgnoreCase("count")) {
 			switch (queryType) {
 			case DOCUMENTS:
-				ArrayList<PublicationObj> topPapers = getTopPapers(dataset, venue, 5);
+				ArrayList<PublicationObj> topPapers = getTopPapers(dataset, venue, query);
 				printTopPapers(topPapers);
 				break;
 			case CITATIONS:
@@ -85,13 +86,13 @@ public class DataManager {
 			case CITED_DOCUMENTS:
 				break;
 			case AUTHORS:
-				ArrayList<String> topAuthors = getTopAuthors(5, venue);
+				ArrayList<String> topAuthors = getTopAuthors(query, venue);
 				for (int topAuthorSize = 0; topAuthorSize < 5; topAuthorSize++) {
 					System.out.println(topAuthors.get(topAuthorSize));
 				}
 				break;
 			case TOP_AUTHORS:
-				ArrayList<String> top5Authors = getTopAuthors(5, venue);
+				ArrayList<String> top5Authors = getTopAuthors(query, venue);
 				System.out.println("top 5 authors are: " + top5Authors);
 				break;
 			case UNIQUE_CITATIONS:
@@ -212,8 +213,9 @@ public class DataManager {
 		return authorCount;
 	}
 
-	public ArrayList<String> getTopAuthors(int numTop, String ven) {
+	public ArrayList<String> getTopAuthors(String[] query, String ven) {
 		int initCount = 0;
+		int numTop = Integer.valueOf(query[1]);
 		ArrayList<AuthorObj> aoArr = new ArrayList<AuthorObj>();
 		for (JSONObject jo : dataset) {
 			if (jo.getString(VENUE).equalsIgnoreCase(ven)) {
@@ -239,7 +241,7 @@ public class DataManager {
 		 * System.out.println(aoArr.get(b).getAuthorName() + " has " +
 		 * aoArr.get(b).getCount() + " publications."); }
 		 */
-		output.writeCSVFile("authors", aoArr, 10);
+		output.writeCSVFile("authors", aoArr, numTop);
 		ArrayList<String> nameArr = extractAuthorNamesFromAoArr(aoArr, numTop);
 		return nameArr;
 	}
@@ -280,8 +282,8 @@ public class DataManager {
 		return hasAuthor;
 	}
 
-	public static ArrayList<PublicationObj> getTopPapers(ArrayList<JSONObject> dataset, String venue,
-			int noOfTopPapers) {
+	public static ArrayList<PublicationObj> getTopPapers(ArrayList<JSONObject> dataset, String venue, String[] queryArr) {
+		int noOfTopPapers = Integer.valueOf(queryArr[1]);
 		ArrayList<PublicationObj> publicationList = new ArrayList<PublicationObj>();
 		for (JSONObject dataInJson : dataset) {
 			String getVenue = getVenue(dataInJson);
