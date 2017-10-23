@@ -60,24 +60,13 @@ public class DataManager {
 		System.out.println("Number of JSONObjects in dataset is: " + dataset.size());
 	}
 
-	/*
-	 * public static String readFile() { String result = ""; try { BufferedReader br
-	 * = new BufferedReader(new FileReader(inputObj.getDataLocation()));
-	 * StringBuilder sb = new StringBuilder(); String line = br.readLine(); while
-	 * (line != null) { sb.append(line); line = br.readLine(); } result =
-	 * sb.toString(); } catch (Exception e) { e.printStackTrace(); } return result;
-	 * }
-	 */
 	private void execute() {
 		// TODO Auto-generated method stub
 		String queryCommand = inputObj.getQueryCommand();
 		String queryType = inputObj.getQueryType();
 		String venue = inputObj.getVenue();
 		String[] query = queryType.split(" ");
-		/*
-		 * System.out.print("queryType once split is: "); for (String i : query) {
-		 * System.out.print(i + ", "); }
-		 */
+		
 		if (queryCommand.equalsIgnoreCase("count")) {
 			switch (queryType) {
 			case DOCUMENTS: //question 2
@@ -90,14 +79,11 @@ public class DataManager {
 					System.out.println("Num of cit in year " + co.getYear() + " is: " + co.getNumCitations());
 				}
 				output.writeCSVFileCitation("citationTrend", citTrend, citTrend.size(), inputObj.getDataLocation());
-				// int numCitations = countInCitations(dataset);
-				// System.out.println("Total number of in-citations in the dataset is: " +
-				// numCitations);
 				break;
 			case CITED_DOCUMENTS:
 				break;
 			case AUTHORS: //Question 1
-				ArrayList<String> topAuthors = getTopAuthors(10, venue);
+				ArrayList<String> topAuthors = getTopAuthors(5, venue);
 				for (int topAuthorSize = 0; topAuthorSize < 5; topAuthorSize++) {
 					System.out.println(topAuthors.get(topAuthorSize));
 				}
@@ -214,7 +200,6 @@ public class DataManager {
 				JSONObject ob6 = (JSONObject) ar5.getJSONObject(i);
 				date = ob6.getInt("date");
 				System.out.println(date);
-				// int datedYear = Integer.parseInt(date);
 				if (date == year) {
 					citedDocuments++;
 				}
@@ -252,8 +237,6 @@ public class DataManager {
 	}
 
 	public ArrayList<String> getTopAuthors(int numTop, String ven) {
-		int initCount = 0;
-		System.out.println("numtop = " + numTop);
 		ArrayList<AuthorObj> aoArr = new ArrayList<AuthorObj>();
 		for (JSONObject jo : dataset) {
 			if (jo.getString(VENUE).equalsIgnoreCase(ven)) {
@@ -274,11 +257,7 @@ public class DataManager {
 		}
 
 		sortArrListDescending(aoArr);
-		/*
-		 * for (int b=0; b < aoArr.size(); b++) {
-		 * System.out.println(aoArr.get(b).getAuthorName() + " has " +
-		 * aoArr.get(b).getCount() + " publications."); }
-		 */
+		
 		output.writeCSVFileAuthor("authors", aoArr, numTop, inputObj.getDataLocation());
 		ArrayList<String> nameArr = extractAuthorNamesFromAoArr(aoArr, numTop);
 		return nameArr;
@@ -335,10 +314,9 @@ public class DataManager {
 				publicationList.add(pubObject);
 			}
 		}
-		// System.out.println(publicationList.size());
 		sortTopPapers(publicationList, "top papers");
 		System.out.println("sorted");
-		//output.writeCSVFilePublication("publications", publicationList, noOfTopPapers, inputObj.getDataLocation());
+//		output.writeCSVFilePublication("publications", publicationList, noOfTopPapers, inputObj.getDataLocation());
 		System.out.println("output to csv");
 		return publicationList;
 	}
@@ -392,7 +370,6 @@ public class DataManager {
 
 	private static String getVenue(JSONObject dataInJson) {
 		String paperVenue = dataInJson.getString("venue");
-		// System.out.println(paperVenue);
 		return paperVenue;
 	}
 
