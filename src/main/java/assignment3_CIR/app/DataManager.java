@@ -29,9 +29,10 @@ public class DataManager {
 	private static final String CITATIONS = "citations";
 	private static final String DOCUMENTS = "documents";
 	private static final String AUTHORS = "authors";
-	private static final String TOP_AUTHORS = "top 5 authors";
+	private static final String TOP_AUTHORS = "top 10 authors";
 	private static final String UNIQUE_CITATIONS = "unique_citations";
 	private static final String PUBLICATIONS = "publications";
+	private static final String TOP = "top";
 	// private static final int PRETTY_PRINT_INDENT_FACTOR = 4;
 
 	private Input inputObj;
@@ -72,11 +73,16 @@ public class DataManager {
 		String queryType = inputObj.getQueryType();
 		String venue = inputObj.getVenue();
 		String[] query = queryType.split(" ");
-
+/*		
+		System.out.print("queryType once split is: ");
+		for (String i : query) {
+			System.out.print(i + ", ");
+		}
+*/
 		if (queryCommand.equalsIgnoreCase("count")) {
 			switch (queryType) {
 			case DOCUMENTS:
-				ArrayList<PublicationObj> topPapers = getTopPapers(dataset, venue, query);
+				ArrayList<PublicationObj> topPapers = getTopPapers(dataset, venue, 5);
 				printTopPapers(topPapers);
 				break;
 			case CITATIONS:
@@ -86,14 +92,16 @@ public class DataManager {
 			case CITED_DOCUMENTS:
 				break;
 			case AUTHORS:
-				ArrayList<String> topAuthors = getTopAuthors(query, venue);
+				ArrayList<String> topAuthors = getTopAuthors(5, venue);
 				for (int topAuthorSize = 0; topAuthorSize < 5; topAuthorSize++) {
 					System.out.println(topAuthors.get(topAuthorSize));
 				}
 				break;
 			case TOP_AUTHORS:
-				ArrayList<String> top5Authors = getTopAuthors(query, venue);
-				System.out.println("top 5 authors are: " + top5Authors);
+				ArrayList<String> top10Authors = getTopAuthors(10, venue);
+				for (int topAuthorSize = 0; topAuthorSize < 10; topAuthorSize++) {
+					System.out.println(top10Authors.get(topAuthorSize));
+				}
 				break;
 			case UNIQUE_CITATIONS:
 				break;
@@ -213,9 +221,9 @@ public class DataManager {
 		return authorCount;
 	}
 
-	public ArrayList<String> getTopAuthors(String[] query, String ven) {
+	public ArrayList<String> getTopAuthors(int numTop, String ven) {
 		int initCount = 0;
-		int numTop = Integer.valueOf(query[1]);
+		System.out.println("numtop = " + numTop);
 		ArrayList<AuthorObj> aoArr = new ArrayList<AuthorObj>();
 		for (JSONObject jo : dataset) {
 			if (jo.getString(VENUE).equalsIgnoreCase(ven)) {
@@ -241,7 +249,7 @@ public class DataManager {
 		 * System.out.println(aoArr.get(b).getAuthorName() + " has " +
 		 * aoArr.get(b).getCount() + " publications."); }
 		 */
-		output.writeCSVFile("authors", aoArr, numTop);
+		//output.writeCSVFile("authors", aoArr, numTop);
 		ArrayList<String> nameArr = extractAuthorNamesFromAoArr(aoArr, numTop);
 		return nameArr;
 	}
@@ -282,8 +290,7 @@ public class DataManager {
 		return hasAuthor;
 	}
 
-	public static ArrayList<PublicationObj> getTopPapers(ArrayList<JSONObject> dataset, String venue, String[] queryArr) {
-		int noOfTopPapers = Integer.valueOf(queryArr[1]);
+	public static ArrayList<PublicationObj> getTopPapers(ArrayList<JSONObject> dataset, String venue, int noOfTopPapers) {
 		ArrayList<PublicationObj> publicationList = new ArrayList<PublicationObj>();
 		for (JSONObject dataInJson : dataset) {
 			String getVenue = getVenue(dataInJson);

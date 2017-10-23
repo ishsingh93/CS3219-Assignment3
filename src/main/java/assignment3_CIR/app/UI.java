@@ -29,8 +29,20 @@ public class UI {
 	}
 
 	private String getDataLoc() {
-		System.out.print("Enter location of dataset: ");
+		System.out.println("Choose data location : ");
+		String ishLoc = "C:\\Users\\User\\my-app\\papers-2017-02-21-sample.json\\papers-2017-02-21-sample.json";
+		String javanLoc = "D:\\CS3219-Assignment3\\papers-2017-02-21-sample.json\\papers-2017-02-21-sample.json";
+		System.out.println("Ish's data location -> " + ishLoc);
+		System.out.println("Javan's data location -> " + javanLoc);
+		System.out.print("Enter your name: ");
 		String loc = sc.nextLine();
-		return loc;
+		if (loc.equalsIgnoreCase("ish")) {
+			return ishLoc;
+		} else if (loc.equalsIgnoreCase("javan")) {
+			return javanLoc;
+		} else {
+			return null;
+		}
+		
 	}
 }
