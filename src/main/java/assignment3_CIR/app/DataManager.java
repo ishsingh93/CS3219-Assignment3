@@ -88,7 +88,7 @@ public class DataManager {
 				for (CitObj co : citTrend) {
 					System.out.println("Num of cit in year " + co.getYear() + " is: " + co.getNumCitations());
 				}
-				output.writeCSVFile3("citationTrend", citTrend, citTrend.size());
+				output.writeCSVFileCitation("citationTrend", citTrend, citTrend.size());
 				// int numCitations = countInCitations(dataset);
 				// System.out.println("Total number of in-citations in the dataset is: " +
 				// numCitations);
@@ -278,7 +278,7 @@ public class DataManager {
 		 * System.out.println(aoArr.get(b).getAuthorName() + " has " +
 		 * aoArr.get(b).getCount() + " publications."); }
 		 */
-		// output.writeCSVFile("authors", aoArr, numTop);
+		output.writeCSVFileAuthor("authors", aoArr, numTop);
 		ArrayList<String> nameArr = extractAuthorNamesFromAoArr(aoArr, numTop);
 		return nameArr;
 	}
@@ -337,7 +337,7 @@ public class DataManager {
 		// System.out.println(publicationList.size());
 		sortTopPapers(publicationList, "top papers");
 		System.out.println("sorted");
-		output.writeCSVFile2("publications", publicationList, noOfTopPapers);
+		output.writeCSVFilePublication("publications", publicationList, noOfTopPapers);
 		System.out.println("output to csv");
 		return publicationList;
 	}

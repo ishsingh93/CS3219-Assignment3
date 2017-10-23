@@ -26,7 +26,7 @@ public class Output {
 		return null;
 	}
 
-	public void writeCSVFile(String fileName, ArrayList<AuthorObj> authorArr, int arraySize) {
+	public void writeCSVFileAuthor(String fileName, ArrayList<AuthorObj> authorArr, int arraySize) {
 		ICsvBeanWriter beanWriter = null;
 		List<AuthorObj> authorList = new ArrayList<AuthorObj>();
 
@@ -67,7 +67,7 @@ public class Output {
 		}
 	}
 
-	public void writeCSVFile2(String fileName, ArrayList<PublicationObj> pubArr, int arraySize) {
+	public void writeCSVFilePublication(String fileName, ArrayList<PublicationObj> pubArr, int arraySize) {
 		ICsvBeanWriter beanWriter = null;
 		List<PublicationObj> publicationList = new ArrayList<PublicationObj>();
 
@@ -113,7 +113,7 @@ public class Output {
 		return PROCESSORS;
 	}
 
-	public void writeCSVFile3(String string, ArrayList<CitObj> citTrend, int size) {
+	public void writeCSVFileCitation(String string, ArrayList<CitObj> citTrend, int size) {
 		ICsvBeanWriter beanWriter = null;
 		List<CitObj> citList = new ArrayList<CitObj>();
 
