@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Top 5 Publications</title>
+    <link rel="stylesheet" href="normalize.css">
+    <style>
+      #chart {
+			height: 700px;
+			margin: 0 auto;											/* NEW */
+			position: relative;
+			width: 700px;
+	  }
+	  .tooltip {
+			background: none repeat scroll 0 0 white;
+			border: 0 none;
+			border-radius: 8px 8px 8px 8px;
+			box-shadow: -3px 3px 15px #888888;
+			color: #333; 
+			display: none; 
+			font: 12px sans-serif;
+			padding: 5px;
+			left: 130px; 
+			padding: 10px; 
+			position: absolute; 
+			text-align: center; 
+			top: 95px;
+			width: 100px; 
+			z-index: 10;
+	  }
+	  .legend {
+        font-size: 14px;
+      }
+      rect {
+        stroke-width: 2;
+        cursor: pointer;                                              /* Toggle effect on coloured squares */
+      }
+      rect.disabled {                                                 /* NEW */
+        fill: transparent !important;                                 /* NEW */
+      }                                                               /* NEW */
+      h2 {                                                            /* NEW */
+        font-size: 20px;                                              /* NEW */
+        text-align: center;                                           /* NEW */
+      }
+    </style>
+  </head>
+  <body>
+	<h2> Top 5 Publications in venue ArXiV from Open Corpus Research Dataset </h2>
+    <div id="chart"></div>
+    <script src="d3.v4.min.js"></script>
+    <script>
+      (function(d3) {
+        'use strict';
+
+        // REMOVED var data = ...
+
+        var width = 700;
+        var height = 700;
+        var radius = Math.min(width, height) / 2;
+        var donutWidth = 90;
+		var legendRectSize = 20;		//size of colored squares
+		var legendSpacing = 6;			//size of spacing between squares
+
+        var color = d3.scaleOrdinal(d3.schemeCategory20b);
+
+        var svg = d3.select('#chart')
+          .append('svg')
+          .attr('width', width)
+          .attr('height', height)
+          .append('g')
+          .attr('transform', 'translate(' + (width / 2) +
+            ',' + (height / 2) + ')');
+
+        var arc = d3.arc()
+          .innerRadius(radius - donutWidth)		//updated for donut charts
+          .outerRadius(radius);
+
+        var pie = d3.pie()
+          .value(function(d) { return d.pubCount; })
+          .sort(null);
+		  
+        var tooltip = d3.select('#chart')                               // NEW
+          .append('div')                                                // NEW
+          .attr('class', 'tooltip');                                    // class instead of id for 'tooltip' in case more than one chart is needed, tooltip styles to be reused
+
+        tooltip.append('div')                                           // first div element
+          .attr('class', 'publicationTitle');                           // NEW
+
+        tooltip.append('div')                                           // second div element
+          .attr('class', 'pubCount');                                   // NEW
+
+        tooltip.append('div')                                           // third div element
+          .attr('class', 'percent');                                    // NEW
+		  
+        d3.csv('publications.csv', function(error, dataset) {            // Parse CSV file function
+          dataset.forEach(function(d) {                             // Iterate through each columns
+            d.pubCount = +d.pubCount;                                     // Change string to number through putting a + in front of variable
+			d.enabled = true;										// enabled property to each entry in dataset, so can track which ones are on, which ones are off
+		  });                                                       // NEW
+
+          var path = svg.selectAll('path')
+            .data(pie(dataset))
+            .enter()
+            .append('path')
+            .attr('d', arc)
+            .attr('fill', function(d, i) {
+              return color(d.data.publicationTitle);
+            })
+			.each(function(d) { this._current = d; }); 					// Necessary for smooth animation
+
+		// event handlers attached to path, tooltip appears when we hover over a segment
+		  path.on('mouseover', function(d) {							// NEW
+			var total = d3.sum(dataset.map(function(d) {                // calculate total no of tickets in dataset through extracting count value from each entry, then using D3's sum()
+              return (d.enabled) ? d.pubCount : 0;                         // check if entry is enabled, then add to count if enabled
+            }));                                                        // NEW
+            var percent = Math.round(1000 * d.data.pubCount / total) / 10; // NEW
+            tooltip.select('.publicationTitle').html(d.data.publicationTitle);                // NEW
+            tooltip.select('.pubCount').html('<b>Mentioned ' + d.data.pubCount + ' times </b>');                // NEW
+            tooltip.select('.percent').html(percent + '%');             // NEW
+            tooltip.style('display', 'block');                          // NEW
+		  });                                                           // NEW
+		  
+		// mouseout event handler, tooltip disappears when we hover out of egment
+          path.on('mouseout', function() {                              // NEW
+            tooltip.style('display', 'none');                           // NEW
+          });                                                           // NEW
+
+          /* OPTIONAL - tooltip to not stay in one place, it uses D3's handy event, contains event info that just fired, to determine wheere on chart the mouse currently is. tooltip follows
+		  // cursor around as long as its hovering over one of the segments
+          path.on('mousemove', function(d) {                            // NEW
+            tooltip.style('top', (d3.event.layerY + 10) + 'px')         // NEW
+              .style('left', (d3.event.layerX + 10) + 'px');            // NEW
+          });                                                           // NEW
+          */
+		  
+		// Iterating over dataset - D3 provides index of current entry as second parameter to callback
+		 var legend = svg.selectAll('.legend')                    //select elements with class legend
+          .data(color.domain())                                   //call data() with domain of color variable, color.domain() -> array of labels from our dataset
+          .enter()                                                //creates placeholders
+          .append('g')                                            //replace placeholders with g elements
+          .attr('class', 'legend')                                //each g is given a legend class
+          .attr('transform', function(d, i) {                     
+            var height = legendRectSize + legendSpacing + 2;          //height of colored square plus spacing
+            var offset =  height * color.domain().length / 2;     //vert offset of entire legend = height of single element + half total no of elements
+            var horz = -6 * legendRectSize;                       // left edge of element - shifted left of center by distance = width of 2 colored squares (provide room for text)
+            var vert = i * height - offset;                       // top edge of element - shifted up or down from center using offset defined and index i of current element.
+            return 'translate(' + horz + ',' + vert + ')';        
+          });                                       
+
+		  //add colored squares
+          legend.append('rect')
+            .attr('width', legendRectSize)
+            .attr('height', legendRectSize)
+            .style('fill', color)
+            .style('stroke', color)
+			.on('click', function(publicationTitle) {
+             var rect = d3.select(this);                              // refers to clicked coloured square, wrap it using D3's select() and assign it to rect.
+              var enabled = true;                                     // set enabled to true
+              var totalEnabled = d3.sum(dataset.map(function(d) {     // find how many enabled and dsiabled, exit if user tries to break things. totalEnabled calculated by iterating over dataset, 1 for each enabled entry, and summed up
+                return (d.enabled) ? 1 : 0;                           // 
+              }));                                                    // 
+
+              if (rect.attr('class') === 'disabled') {                // check if current square is disabled, if it is, remove disabled class
+                rect.attr('class', '');                               // 
+              } else {                                                // 
+                if (totalEnabled < 2) return;                         // if square enabled, first check how many squares enabled previously. if less than 2, stop there.
+                rect.attr('class', 'disabled');                       // otherwise flag square as disabled, set enabled to false
+                enabled = false;                                      // 
+              }                                                       // 
+
+              pie.value(function(d) {                                 // 
+                if (d.publicationTitle === publicationTitle) d.enabled = enabled;           // check if entry in question has label matching label of clicked coloured square
+                return (d.enabled) ? d.pubCount : 0;                     // update enabled property based on entry's status
+              });                                                     // 
+
+              path = path.data(pie(dataset));                         // update path by providing data() with updated pie
+
+              path.transition()                                       // animate transition
+                .duration(750)                                        // duration of transition
+				.attrTween('d', function(d) {                         // animating 'd' attribute, refers to updated data point - the one resulting from update to pie, refers to current path element
+                  var interpolate = d3.interpolate(this._current, d); // interpolate between current value (this._current) and new value (d)
+                  this._current = interpolate(0);                     // NEW
+                  return function(t) {                                // NEW
+                    return arc(interpolate(t));                       // NEW
+                  };                                                  // NEW
+                });                                                   // NEW
+            });                                                       // NEW
+			
+		  // add labels to colored squares
+          legend.append('text')
+            .attr('x', legendRectSize + legendSpacing)
+            .attr('y', legendRectSize - legendSpacing)
+            .text(function(d) { return d; });
+
+        });                                                         // NEW
+
+      })(window.d3);
+    </script>
+  </body>
+</html>

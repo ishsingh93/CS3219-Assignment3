@@ -7,9 +7,7 @@ import java.util.List;
 
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
-import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.ICsvBeanWriter;
-import org.supercsv.io.ICsvListWriter;
 import org.supercsv.prefs.CsvPreference;
 
 public class Output {
@@ -26,7 +24,7 @@ public class Output {
 		return null;
 	}
 
-	public void writeCSVFileAuthor(String fileName, ArrayList<AuthorObj> authorArr, int arraySize) {
+	public void writeCSVFileAuthor(String fileName, ArrayList<AuthorObj> authorArr, int arraySize, String dataLoc) {
 		ICsvBeanWriter beanWriter = null;
 		List<AuthorObj> authorList = new ArrayList<AuthorObj>();
 
@@ -67,9 +65,9 @@ public class Output {
 		}
 	}
 
-	public void writeCSVFilePublication(String fileName, ArrayList<PublicationObj> pubArr, int arraySize) {
+	public void writeCSVFilePublication(String fileName, ArrayList<PubTrendObj> pubArr, int arraySize, String dataLoc) {
 		ICsvBeanWriter beanWriter = null;
-		List<PublicationObj> publicationList = new ArrayList<PublicationObj>();
+		List<PubTrendObj> publicationList = new ArrayList<PubTrendObj>();
 
 		for (int i = 0; i < arraySize; i++) {
 			publicationList.add(pubArr.get(i));
@@ -81,14 +79,14 @@ public class Output {
 							"D:\\CS3219-Assignment3\\src\\main\\java\\assignment3_CIR\\app\\d3\\" + fileName + ".csv"),
 					CsvPreference.STANDARD_PREFERENCE);
 
-			final String[] header = new String[] { "publicationTitle", "pubCount" };
+			final String[] header = new String[] { "publishedYear", "publicationsCount" };
 			final CellProcessor[] processors = getProcessors();
 
 			// Write the CSV file header
 			beanWriter.writeHeader(header);
 
 			// Write statistics
-			for (PublicationObj pubObject : publicationList) {
+			for (PubTrendObj pubObject : publicationList) {
 				beanWriter.write(pubObject, header, processors);
 			}
 
@@ -113,7 +111,7 @@ public class Output {
 		return PROCESSORS;
 	}
 
-	public void writeCSVFileCitation(String string, ArrayList<CitObj> citTrend, int size) {
+	public void writeCSVFileCitation(String fileName, ArrayList<CitObj> citTrend, int size, String dataLoc) {
 		ICsvBeanWriter beanWriter = null;
 		List<CitObj> citList = new ArrayList<CitObj>();
 

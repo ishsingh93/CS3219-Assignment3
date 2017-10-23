@@ -35,7 +35,7 @@ public class DataManager {
 	private static final String TOP = "top";
 	// private static final int PRETTY_PRINT_INDENT_FACTOR = 4;
 
-	private Input inputObj;
+	private static Input inputObj;
 	private ArrayList<JSONObject> dataset = new ArrayList<JSONObject>();
 	private static Output output = new Output();
 
@@ -54,6 +54,7 @@ public class DataManager {
 				JSONObject jo = new JSONObject(i);
 				// FileManager.jsonToTxtFile(jo, "data"+ jsonTxt.indexOf(i) + ".json");
 				dataset.add(jo);
+				System.out.println("Number of JSONObjects in dataset is: " + dataset.size());
 			}
 		}
 		System.out.println("Number of JSONObjects in dataset is: " + dataset.size());
@@ -79,24 +80,24 @@ public class DataManager {
 		 */
 		if (queryCommand.equalsIgnoreCase("count")) {
 			switch (queryType) {
-			case DOCUMENTS:
+			case DOCUMENTS: //question 2
 				ArrayList<PublicationObj> topPapers = getTopPapers(dataset, venue, 5);
 				printTopPapers(topPapers);
 				break;
-			case CITATIONS:
+			case CITATIONS: //question 5
 				ArrayList<CitObj> citTrend = getCitationTrend();
 				for (CitObj co : citTrend) {
 					System.out.println("Num of cit in year " + co.getYear() + " is: " + co.getNumCitations());
 				}
-				output.writeCSVFileCitation("citationTrend", citTrend, citTrend.size());
+				output.writeCSVFileCitation("citationTrend", citTrend, citTrend.size(), inputObj.getDataLocation());
 				// int numCitations = countInCitations(dataset);
 				// System.out.println("Total number of in-citations in the dataset is: " +
 				// numCitations);
 				break;
 			case CITED_DOCUMENTS:
 				break;
-			case AUTHORS:
-				ArrayList<String> topAuthors = getTopAuthors(5, venue);
+			case AUTHORS: //Question 1
+				ArrayList<String> topAuthors = getTopAuthors(10, venue);
 				for (int topAuthorSize = 0; topAuthorSize < 5; topAuthorSize++) {
 					System.out.println(topAuthors.get(topAuthorSize));
 				}
@@ -109,8 +110,8 @@ public class DataManager {
 				break;
 			case UNIQUE_CITATIONS:
 				break;
-			case PUBLICATIONS:
-				ArrayList<PubTrendObj> publicationsPerYear = publicationTrend(dataset, "");
+			case PUBLICATIONS: //Question 3
+				ArrayList<PubTrendObj> publicationsPerYear = publicationTrend(dataset, "ICSE");
 				printPubTrend(publicationsPerYear);
 				break;
 			default:
@@ -278,7 +279,7 @@ public class DataManager {
 		 * System.out.println(aoArr.get(b).getAuthorName() + " has " +
 		 * aoArr.get(b).getCount() + " publications."); }
 		 */
-		output.writeCSVFileAuthor("authors", aoArr, numTop);
+		output.writeCSVFileAuthor("authors", aoArr, numTop, inputObj.getDataLocation());
 		ArrayList<String> nameArr = extractAuthorNamesFromAoArr(aoArr, numTop);
 		return nameArr;
 	}
@@ -337,7 +338,7 @@ public class DataManager {
 		// System.out.println(publicationList.size());
 		sortTopPapers(publicationList, "top papers");
 		System.out.println("sorted");
-		output.writeCSVFilePublication("publications", publicationList, noOfTopPapers);
+		//output.writeCSVFilePublication("publications", publicationList, noOfTopPapers, inputObj.getDataLocation());
 		System.out.println("output to csv");
 		return publicationList;
 	}
@@ -384,6 +385,7 @@ public class DataManager {
 				}
 			}
 		}
+		output.writeCSVFilePublication("publicationtrend", pubTrend, pubTrend.size(), inputObj.getDataLocation());
 
 		return pubTrend;
 	}
