@@ -73,12 +73,10 @@ public class DataManager {
 		String queryType = inputObj.getQueryType();
 		String venue = inputObj.getVenue();
 		String[] query = queryType.split(" ");
-/*		
-		System.out.print("queryType once split is: ");
-		for (String i : query) {
-			System.out.print(i + ", ");
-		}
-*/
+		/*
+		 * System.out.print("queryType once split is: "); for (String i : query) {
+		 * System.out.print(i + ", "); }
+		 */
 		if (queryCommand.equalsIgnoreCase("count")) {
 			switch (queryType) {
 			case DOCUMENTS:
@@ -86,8 +84,14 @@ public class DataManager {
 				printTopPapers(topPapers);
 				break;
 			case CITATIONS:
-				int numCitations = countInCitations(dataset);
-				System.out.println("Total number of citations in the dataset is: " + numCitations);
+				ArrayList<CitObj> citTrend = getCitationTrend();
+				for (CitObj co : citTrend) {
+					System.out.println("Num of cit in year " + co.getYear() + " is: " + co.getNumCitations());
+				}
+				output.writeCSVFile3("citationTrend", citTrend, citTrend.size());
+				// int numCitations = countInCitations(dataset);
+				// System.out.println("Total number of in-citations in the dataset is: " +
+				// numCitations);
 				break;
 			case CITED_DOCUMENTS:
 				break;
@@ -136,6 +140,26 @@ public class DataManager {
 		System.out.println("Data manager executed task successfully");
 	}
 
+	private ArrayList<CitObj> getCitationTrend() {
+		ArrayList<Integer> numYrs = inputObj.getNumYrs();
+		ArrayList<CitObj> citTrend = new ArrayList<CitObj>();
+		for (Integer i : numYrs) {
+			int year = Integer.valueOf(i);
+			int numCit = 0;
+			for (JSONObject jo : dataset) {
+				if (jo.has("year")) {
+					int jsonYr = jo.getInt("year");
+					if (jsonYr == year) {
+						numCit = numCit + countInCitationsFromObj(jo);
+					}
+				}
+			}
+			CitObj co = new CitObj(year, numCit);
+			citTrend.add(co);
+		}
+		return citTrend;
+	}
+
 	private void printPubTrend(ArrayList<PubTrendObj> publicationsPerYear) {
 		System.out.println("Trend of publications " + publicationsPerYear.size());
 		for (int limits = 0; limits < publicationsPerYear.size(); limits++) {
@@ -147,8 +171,8 @@ public class DataManager {
 	private void printTopPapers(ArrayList<PublicationObj> topPapers) {
 		System.out.println("Top 5 Papers of dataset " + topPapers.size());
 		for (int limit = 0; limit < 5; limit++) {
-			System.out.println(topPapers.get(limit).getPublicationTitle() + " : "
-					+ topPapers.get(limit).getPubCount() + " times");
+			System.out.println(
+					topPapers.get(limit).getPublicationTitle() + " : " + topPapers.get(limit).getPubCount() + " times");
 		}
 	}
 
@@ -158,6 +182,11 @@ public class DataManager {
 			JSONArray inCitArr = dataset.get(i).getJSONArray("inCitations");
 			numCitations = numCitations + inCitArr.length();
 		}
+		return numCitations;
+	}
+
+	public static int countInCitationsFromObj(JSONObject data) {
+		int numCitations = data.getJSONArray("inCitations").length();
 		return numCitations;
 	}
 
@@ -249,7 +278,7 @@ public class DataManager {
 		 * System.out.println(aoArr.get(b).getAuthorName() + " has " +
 		 * aoArr.get(b).getCount() + " publications."); }
 		 */
-		//output.writeCSVFile("authors", aoArr, numTop);
+		// output.writeCSVFile("authors", aoArr, numTop);
 		ArrayList<String> nameArr = extractAuthorNamesFromAoArr(aoArr, numTop);
 		return nameArr;
 	}
@@ -290,7 +319,8 @@ public class DataManager {
 		return hasAuthor;
 	}
 
-	public static ArrayList<PublicationObj> getTopPapers(ArrayList<JSONObject> dataset, String venue, int noOfTopPapers) {
+	public static ArrayList<PublicationObj> getTopPapers(ArrayList<JSONObject> dataset, String venue,
+			int noOfTopPapers) {
 		ArrayList<PublicationObj> publicationList = new ArrayList<PublicationObj>();
 		for (JSONObject dataInJson : dataset) {
 			String getVenue = getVenue(dataInJson);
@@ -333,26 +363,28 @@ public class DataManager {
 			}
 		}
 		sortTopPapers(pubList, "publication trend");
-		
+
 		ArrayList<PubTrendObj> pubTrend = new ArrayList<PubTrendObj>();
 		int latestPublishedYear = pubList.get(0).getPubYear();
-		for (int i = 0; i< pubList.size(); i++) {
-			if (i == 0) { //add first element of pubTrend, only applies for first element of pubList
+		for (int i = 0; i < pubList.size(); i++) {
+			if (i == 0) { // add first element of pubTrend, only applies for first element of pubList
 				pubTrend.add(new PubTrendObj(latestPublishedYear, 1));
 			} else {
-				for (int j=0; j< pubTrend.size(); j++) { //check if PublicationObj.getPubYear() is same as year of element of pubTrend
-					if (pubList.get(i).getPubYear() == latestPublishedYear && pubTrend.get(j).getPublishedYear() == latestPublishedYear) {
+				for (int j = 0; j < pubTrend.size(); j++) { // check if PublicationObj.getPubYear() is same as year of
+															// element of pubTrend
+					if (pubList.get(i).getPubYear() == latestPublishedYear
+							&& pubTrend.get(j).getPublishedYear() == latestPublishedYear) {
 						pubTrend.get(j).incrementPublicationsCount();
 					} else if (pubList.get(i).getPubYear() != latestPublishedYear) {
 						latestPublishedYear = pubList.get(i).getPubYear();
 						pubTrend.add(new PubTrendObj(latestPublishedYear, 0));
 					} else {
-						
+
 					}
 				}
 			}
 		}
-		
+
 		return pubTrend;
 	}
 
